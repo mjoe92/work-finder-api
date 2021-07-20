@@ -4,6 +4,7 @@ import com.gbsolutions.workfinder.model.entity.Job;
 import com.gbsolutions.workfinder.repository.ClientRepository;
 import com.gbsolutions.workfinder.repository.JobRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
 
 import java.net.MalformedURLException;
@@ -14,15 +15,18 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
-public class JobService {
+public class JobService extends BaseService<Job, String> {
 
     @Autowired
-    private JobRepository jobRepository;
-    @Autowired
-    private ClientRepository clientRepository;
+    private final ClientRepository clientRepository;
+
+    public JobService(JobRepository jobRepository, ClientRepository clientRepository) {
+        super(jobRepository);
+        this.clientRepository = clientRepository;
+    }
 
     public Optional<URL> saveAndReturnUrl(Job job) {
-        jobRepository.save(job);
+        repository.save(job);
         URL url = null;
         try {
             url = new URL("");
@@ -35,7 +39,7 @@ public class JobService {
     public List<Job> listJobsBy(String title, String location) {
         final String titleFilter = (title == null ? "" : title);
         final String locationFilter = (location == null ? "" : location);
-        return jobRepository.findAll().stream()
+        return findAll().stream()
                 .filter(job -> job.getTitle().contains(titleFilter)
                         && job.getLocation().contains(locationFilter))
                 .collect(Collectors.toList());
@@ -46,14 +50,10 @@ public class JobService {
     }
 
     public void deleteAllBy(String title) {
-        jobRepository.findAll().forEach(job -> {
+        repository.findAll().forEach(job -> {
             if (job.getTitle().equals(title)) {
-                jobRepository.delete(job);
+                repository.delete(job);
             }
         });
-    }
-
-    public List<Job> findAll() {
-        return jobRepository.findAll();
     }
 }

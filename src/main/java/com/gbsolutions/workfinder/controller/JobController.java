@@ -2,9 +2,6 @@ package com.gbsolutions.workfinder.controller;
 
 import com.gbsolutions.workfinder.model.entity.Job;
 import com.gbsolutions.workfinder.service.JobService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -14,14 +11,10 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/positions")
-public class JobController {
+public class JobController extends BaseController<Job, String, JobService> {
 
-    @Autowired
-    private JobService service;
-
-    @GetMapping
-    public List<Job> findAll() {
-        return service.findAll();
+    protected JobController(JobService service) {
+        super(service);
     }
 
     @GetMapping("/{api_key}")
