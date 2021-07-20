@@ -4,7 +4,7 @@ import lombok.Data;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.validation.constraints.Max;
+import javax.validation.constraints.Size;
 import java.net.URL;
 
 @Data
@@ -12,9 +12,11 @@ import java.net.URL;
 public class Job {
 
     @Id
-    @Max(50)
+    @Size(max = 50)
     private String title;
-    @Max(50)
+    @Size(max = 50)
     private String location;
+
+    private URL url;
 
 }
