@@ -12,9 +12,9 @@ import java.net.URL;
 public class Job {
 
     @Id
-    @Size(max = 50)
+    @Size(max = 50, message = "Field 'title' size is max. 50!")
     private String title;
-    @Size(max = 50)
+    @Size(max = 50, message = "Field 'location' size is max. 50!")
     private String location;
 
     private URL url;

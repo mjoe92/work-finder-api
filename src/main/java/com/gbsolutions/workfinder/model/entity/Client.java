@@ -19,11 +19,11 @@ public class Client {
     @GenericGenerator(name = "UUIDGenerator", strategy = "uuid2")
     private UUID id;
 
-    @Size(max = 100)
-    @NotBlank
+    @Size(max = 100, message = "Field 'name' size is max. 100!")
+    @NotBlank(message = "Field 'name' mustn't be blanked!")
     private String name;
 
-    @Email(message = "NOT a valid email address!")
+    @Email(message = "Field 'email' is not valid!")
     @Column(unique = true)
     private String email;
 
