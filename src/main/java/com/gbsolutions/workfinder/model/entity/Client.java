@@ -1,15 +1,13 @@
 package com.gbsolutions.workfinder.model.entity;
 
 import lombok.Data;
-import org.hibernate.validator.constraints.UniqueElements;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.id.UUIDGenerator;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.Max;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.UUID;
 
 @Data
@@ -17,15 +15,16 @@ import java.util.UUID;
 public class Client {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "UUIDGenerator")
+    @GenericGenerator(name = "UUIDGenerator", strategy = "uuid2")
     private UUID id;
 
-    @Max(100)
+    @Size(max = 100)
     @NotBlank
     private String name;
 
     @Email(message = "NOT a valid email address!")
-    @UniqueElements(message = "Email is NOT unique!")
+    @Column(unique = true)
     private String email;
 
 }

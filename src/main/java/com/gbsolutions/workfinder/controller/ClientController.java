@@ -35,5 +35,4 @@ public class ClientController {
     public void deleteById(@PathVariable String id) {
         service.deleteById(UUID.fromString(id));
     }
-
 }

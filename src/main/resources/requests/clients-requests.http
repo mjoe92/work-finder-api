@@ -1,0 +1,26 @@
+###
+GET http://localhost:8080/clients
+
+<> 2021-07-20T165954.200.json
+
+###
+POST http://localhost:8080/clients
+Content-Type: application/json
+
+{
+  "name":"Joe",
+  "email":"mcsurgai@gmail.com"
+}
+
+<> 2021-07-20T165954-1.200.json
+
+###
+GET http://localhost:8080/clients/a2d8a61c-7a70-49b9-9919-363efd8b9749
+
+<> 2021-07-20T165656.200.json
+
+###
+DELETE http://localhost:8080/clients/a2d8a61c-7a70-49b9-9919-363efd8b9749
+
+<> 2021-07-20T165954.500.json
+
