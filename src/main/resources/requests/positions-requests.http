@@ -1,0 +1,19 @@
+###
+GET http://localhost:8080/positions
+
+<> 2021-07-20T175042.200.json
+
+###
+GET http://localhost:8080/positions/1e5e0f0a-9a58-4f29-b700-6e53b2b25db2
+
+<> 2021-07-20T175330.200.json
+
+###
+POST http://localhost:8080/positions/1e5e0f0a-9a58-4f29-b700-6e53b2b25db2
+
+{
+    "title":"developer",
+    "location":"Hungary",
+}
+
+<> 2021-07-20T175537.415.json
