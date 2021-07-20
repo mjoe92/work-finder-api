@@ -25,4 +25,9 @@ public class ApiController {
         return service.getJobCollection();
     }
 
+    @Cacheable(JOB_LIST)
+    @GetMapping("/" + JOB_LIST)
+    public List<Job> getAllJobs() {
+        return service.getJobListBy("", "");
+    }
 }

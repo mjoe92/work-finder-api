@@ -2,9 +2,13 @@ package com.gbsolutions.workfinder.model.api.adzuna;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.gbsolutions.workfinder.logger.ConsoleLogger;
+import com.gbsolutions.workfinder.logger.PhaseLogger;
 import com.gbsolutions.workfinder.model.entity.Job;
 import lombok.Data;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,6 +24,12 @@ public class ApiJobCollection {
             Job job = new Job();
             job.setTitle(apiJob.getTitle());
             job.setLocation(apiJob.getLocation().getLocationName());
+            try {
+                job.setUrl(new URL(apiJob.getUrl()));
+            } catch (MalformedURLException e) {
+                ConsoleLogger logger = new PhaseLogger(this.getClass());
+                logger.error("Invalid URL!");
+            }
             return job;
         }).collect(Collectors.toList());
     }
@@ -29,6 +39,8 @@ public class ApiJobCollection {
 class ApiJob {
 
     private String title;
+    @JsonProperty("redirect_url")
+    private String url;
     private ApiJobLocation location;
 
 }

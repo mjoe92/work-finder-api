@@ -24,19 +24,24 @@ public class FetchApiService {
     private String apiId;
 
     public ApiJobCollection getJobCollection() {
-        return restTemplate.getForObject(getApiUrl(), ApiJobCollection.class);
+        return restTemplate.getForObject(getApiUrl("", ""), ApiJobCollection.class);
     }
 
-    public String getApiUrl() {
+    public List<Job> getJobListBy(String title, String location) {
+        return Objects.requireNonNull(restTemplate
+                .getForObject(getApiUrl(title, location), ApiJobCollection.class))
+                .toJobList();
+    }
+
+    public String getApiUrl(String title, String location) {
         switch (api) {
             case "adzuna":
-                return  "http://api.adzuna.com/v1/api/jobs/gb/search/1?" +
+                return  "https://api.adzuna.com/v1/api/jobs/gb/search/1?" +
                         "app_id=" + apiId + "&" +
                         "app_key=" + apiKey + "&" +
-                        //"results_per_page=" + pages + "&" +
+                        "title_only=" + title + "&" +
+                        "where=" + location + "&" +
                         "content-type=application/json";
-            case "jooble":
-                return  "";
         }
         return "";
     }
