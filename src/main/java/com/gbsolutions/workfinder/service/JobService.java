@@ -41,7 +41,6 @@ public class JobService extends BaseService<Job, JobDto, Long> {
         title = title == null ? "" : title;
         location = location == null ? "" : location;
         return mapper.toDtoList(apiService.getJobListBy(title, location));
-
     }
 
     public Optional<URL> saveAndReturnUrl(Job job) {

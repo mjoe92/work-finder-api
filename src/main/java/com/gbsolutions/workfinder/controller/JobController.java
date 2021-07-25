@@ -26,7 +26,6 @@ public class JobController extends BaseController<Job, JobDto, Long, JobService>
         if (isValidApiKey(apiKey)) {
             return service.listJobsBy(title, location);
         }
-        logger.error("Invalid API key!");
         return null;
     }
 
@@ -36,7 +35,6 @@ public class JobController extends BaseController<Job, JobDto, Long, JobService>
         if (isValidApiKey(apiKey)) {
             return service.saveAndReturnUrl(job).orElse(null);
         }
-        logger.error("Invalid API key!");
         return null;
     }
     private boolean isValidApiKey(String apiKey) {
