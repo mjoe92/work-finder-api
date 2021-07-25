@@ -12,7 +12,8 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/positions")
-public class JobController extends BaseController<Job, JobDto, Long, JobService> {
+public class JobController
+        extends BaseController<Job, JobDto, Long, JobService> {
 
     protected JobController(JobService service) {
         super(service);
@@ -23,33 +24,31 @@ public class JobController extends BaseController<Job, JobDto, Long, JobService>
             @RequestParam(required = false) String title,
             @RequestParam(required = false) String location,
             @PathVariable("api_key") String apiKey) {
-        if (isValidApiKey(apiKey)) {
-            return service.listJobsBy(title, location);
-        }
-        logger.error("Invalid API key!");
-        return null;
+        return returnWithKeyCheck(service
+                .listJobsBy(title, location), apiKey);
     }
 
     @PostMapping("/{api_key}")
     public URL jobRegister(@Valid @RequestBody Job job,
                            @PathVariable("api_key") String apiKey) {
-        if (isValidApiKey(apiKey)) {
-            return service.saveAndReturnUrl(job).orElse(null);
-        }
-        logger.error("Invalid API key!");
-        return null;
+        return returnWithKeyCheck(service
+                .saveAndReturnUrl(job).orElse(null), apiKey);
     }
 
     @DeleteMapping("/{api_key}/{id}")
     public Long deleteById(@PathVariable("api_key") String apiKey,
                            @PathVariable("id") Long id) {
+        return returnWithKeyCheck(service
+                .deleteById(id), apiKey);
+    }
+
+    private <R> R returnWithKeyCheck(R response, String apiKey) {
         if (isValidApiKey(apiKey)) {
-            return service.deleteById(id);
+            return response;
         }
         logger.error("Invalid API key!");
         return null;
     }
-
     private boolean isValidApiKey(String apiKey) {
         UUID uuidApiKey = UUID.fromString(apiKey);
         return service.isValidApiKey(uuidApiKey);
