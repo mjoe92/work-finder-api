@@ -5,10 +5,8 @@ import com.gbsolutions.workfinder.model.entity.Client;
 import com.gbsolutions.workfinder.model.mapper.ClientMapper;
 import com.gbsolutions.workfinder.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.UUID;
 
 @Service

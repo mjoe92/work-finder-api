@@ -17,7 +17,6 @@ public abstract class BaseController<E, D, T, S extends BaseService<E, D, T>> {
         this.service = service;
         this.logger = new PhaseLogger(this.getClass());
     }
-/*
 
     @GetMapping
     public List<D> findAll(){
@@ -45,6 +44,5 @@ public abstract class BaseController<E, D, T, S extends BaseService<E, D, T>> {
                 "("+ id.getClass().getSimpleName() + ")");
         return service.deleteById(id);
     }
-*/
 
 }

@@ -7,7 +7,6 @@ import com.gbsolutions.workfinder.model.mapper.JobMapper;
 import com.gbsolutions.workfinder.repository.ClientRepository;
 import com.gbsolutions.workfinder.repository.JobRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
 
 import java.net.MalformedURLException;
@@ -22,7 +21,6 @@ public class JobService extends BaseService<Job, JobDto, Long> {
 
     @Autowired
     private final ClientRepository clientRepository;
-
     @Autowired
     private final FetchApiService apiService;
 
@@ -44,13 +42,18 @@ public class JobService extends BaseService<Job, JobDto, Long> {
     }
 
     public Optional<URL> saveAndReturnUrl(Job job) {
-        repository.save(job);
         URL url = null;
-        try {
-            url = new URL("");
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
+        if (job.getUrl() == null) {
+            String path = "http://localhost:8080/positions?title=" +
+                    job.getTitle() + "&location=" + job.getLocation();
+            try {
+                url = new URL(path);
+            } catch (MalformedURLException e) {
+                logger.error("Invalid URL path!");
+            }
         }
+        job.setUrl(url);
+        repository.save(job);
         return Optional.ofNullable(url);
     }
 
@@ -58,13 +61,13 @@ public class JobService extends BaseService<Job, JobDto, Long> {
         final String titleFilter = (title == null ? "" : title);
         final String locationFilter = (location == null ? "" : location);
 
-
         List<JobDto> allJobs = getJobListFromApiBy(title, location);
-
-        return findAll().stream()
+        allJobs.addAll(findAll().stream()
                 .filter(job -> job.getTitle().contains(titleFilter)
                         && job.getLocation().contains(locationFilter))
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()));
+
+        return allJobs;
     }
 
     public boolean isValidApiKey(UUID uuid) {

@@ -1,7 +1,4 @@
 # job-finder-api
-
-
-
 A feladat:
 A cél egy több forrásból adatokat gyűjtő álláskereső API létrehozása.
 A feladatot Java 11 nyelven, Spring framework segítségével valósítsd meg. Adatok tárolására
