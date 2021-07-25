@@ -25,6 +25,7 @@ public class ClientController extends BaseController<Client, ClientDto, UUID, Cl
 
     @PostMapping
     public UUID saveAndReturnId(@Valid @RequestBody Client client) {
+        logger.info("Completed 'POST' request: save(client)");
         return service.saveAndReturnId(client);
     }
 

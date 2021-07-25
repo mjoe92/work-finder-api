@@ -39,13 +39,19 @@ public class JobController extends BaseController<Job, JobDto, Long, JobService>
         logger.error("Invalid API key!");
         return null;
     }
+
+    @DeleteMapping("/{api_key}/{id}")
+    public Long deleteById(@PathVariable("api_key") String apiKey,
+                           @PathVariable("id") Long id) {
+        if (isValidApiKey(apiKey)) {
+            return service.deleteById(id);
+        }
+        logger.error("Invalid API key!");
+        return null;
+    }
+
     private boolean isValidApiKey(String apiKey) {
         UUID uuidApiKey = UUID.fromString(apiKey);
         return service.isValidApiKey(uuidApiKey);
-    }
-
-    @DeleteMapping("/{id}")
-    public void deleteAllBy(@PathVariable("id") String title) {
-        service.deleteAllBy(title);
     }
 }

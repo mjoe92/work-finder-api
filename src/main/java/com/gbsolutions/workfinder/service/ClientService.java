@@ -18,6 +18,7 @@ public class ClientService extends BaseService<Client, ClientDto, UUID> {
         super(repository, clientMapper);
     }
 
+    @Override
     public UUID deleteById(UUID uuid) {
         repository.deleteById(uuid);
         return uuid;

@@ -2,7 +2,6 @@ package com.gbsolutions.workfinder.service;
 
 import com.gbsolutions.workfinder.model.dto.JobDto;
 import com.gbsolutions.workfinder.model.entity.Job;
-import com.gbsolutions.workfinder.model.mapper.ClientMapper;
 import com.gbsolutions.workfinder.model.mapper.JobMapper;
 import com.gbsolutions.workfinder.repository.ClientRepository;
 import com.gbsolutions.workfinder.repository.JobRepository;
@@ -62,7 +61,7 @@ public class JobService extends BaseService<Job, JobDto, Long> {
         final String locationFilter = (location == null ? "" : location);
 
         List<JobDto> allJobs = getJobListFromApiBy(title, location);
-        allJobs.addAll(findAll().stream()
+        allJobs.addAll(findAllInRepo().stream()
                 .filter(job -> job.getTitle().contains(titleFilter)
                         && job.getLocation().contains(locationFilter))
                 .collect(Collectors.toList()));
@@ -72,13 +71,5 @@ public class JobService extends BaseService<Job, JobDto, Long> {
 
     public boolean isValidApiKey(UUID uuid) {
         return clientRepository.existsById(uuid);
-    }
-
-    public void deleteAllBy(String title) {
-        repository.findAll().forEach(job -> {
-            if (job.getTitle().equals(title)) {
-                repository.delete(job);
-            }
-        });
     }
 }

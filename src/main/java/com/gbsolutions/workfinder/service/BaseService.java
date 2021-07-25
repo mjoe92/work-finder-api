@@ -21,7 +21,7 @@ public abstract class BaseService<E, D, T> {
         this.logger = new PhaseLogger(this.getClass());
     }
 
-    public List<D> findAll() {
+    public List<D> findAllInRepo() {
         List<D> list = new LinkedList<>();
         logger.info("Completed accessing repository '"
                 + repository.getClass().getSimpleName() + "'");
