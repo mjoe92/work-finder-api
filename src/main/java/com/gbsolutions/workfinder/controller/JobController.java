@@ -1,5 +1,6 @@
 package com.gbsolutions.workfinder.controller;
 
+import com.gbsolutions.workfinder.model.dto.JobDto;
 import com.gbsolutions.workfinder.model.entity.Job;
 import com.gbsolutions.workfinder.service.JobService;
 import org.springframework.web.bind.annotation.*;
@@ -11,14 +12,14 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/positions")
-public class JobController extends BaseController<Job, String, JobService> {
+public class JobController extends BaseController<Job, JobDto, Long, JobService> {
 
     protected JobController(JobService service) {
         super(service);
     }
 
     @GetMapping("/{api_key}")
-    public List<Job> listJobsBy(
+    public List<JobDto> listJobsBy(
             @RequestParam(required = false) String title,
             @RequestParam(required = false) String location,
             @PathVariable("api_key") String apiKey) {

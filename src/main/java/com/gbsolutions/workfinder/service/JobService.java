@@ -1,6 +1,9 @@
 package com.gbsolutions.workfinder.service;
 
+import com.gbsolutions.workfinder.model.dto.JobDto;
 import com.gbsolutions.workfinder.model.entity.Job;
+import com.gbsolutions.workfinder.model.mapper.ClientMapper;
+import com.gbsolutions.workfinder.model.mapper.JobMapper;
 import com.gbsolutions.workfinder.repository.ClientRepository;
 import com.gbsolutions.workfinder.repository.JobRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,26 +17,28 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
-public class JobService extends BaseService<Job, String> {
+public class JobService extends BaseService<Job, JobDto, Long> {
 
     @Autowired
     private final ClientRepository clientRepository;
     @Autowired
     private final FetchApiService apiService;
 
+    @Autowired
     public JobService(JobRepository jobRepository,
+                      JobMapper jobMapper,
                       ClientRepository clientRepository,
                       FetchApiService apiService) {
 
-        super(jobRepository);
+        super(jobRepository, jobMapper);
         this.clientRepository = clientRepository;
         this.apiService = apiService;
     }
 
-    public List<Job> getJobListFromApiBy(String title, String location) {
+    public List<JobDto> getJobListFromApiBy(String title, String location) {
         title = title == null ? "" : title;
         location = location == null ? "" : location;
-        return apiService.getJobListBy(title, location);
+        return mapper.toDtoList(apiService.getJobListBy(title, location));
     }
 
     public Optional<URL> saveAndReturnUrl(Job job) {
@@ -52,12 +57,12 @@ public class JobService extends BaseService<Job, String> {
         return Optional.ofNullable(url);
     }
 
-    public List<Job> listJobsBy(String title, String location) {
+    public List<JobDto> listJobsBy(String title, String location) {
         final String titleFilter = (title == null ? "" : title);
         final String locationFilter = (location == null ? "" : location);
 
-        List<Job> allJobs = getJobListFromApiBy(title, location);
-        allJobs.addAll(findAllInRepo().stream()
+        List<JobDto> allJobs = getJobListFromApiBy(title, location);
+        allJobs.addAll(findAll().stream()
                 .filter(job -> job.getTitle().contains(titleFilter)
                         && job.getLocation().contains(locationFilter))
                 .collect(Collectors.toList()));
