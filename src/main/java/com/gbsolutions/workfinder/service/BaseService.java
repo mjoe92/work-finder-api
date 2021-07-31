@@ -3,18 +3,18 @@ package com.gbsolutions.workfinder.service;
 import com.gbsolutions.workfinder.logger.ConsoleLogger;
 import com.gbsolutions.workfinder.logger.PhaseLogger;
 import com.gbsolutions.workfinder.model.mapper.GenericMapper;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.LinkedList;
 import java.util.List;
 
 public abstract class BaseService<E, D, T> {
 
-    protected final CrudRepository<E, T> repository;
+    protected final JpaRepository<E, T> repository;
     protected final GenericMapper<E, D> mapper;
     protected final ConsoleLogger logger;
 
-    public BaseService(CrudRepository<E, T> repository,
+    public BaseService(JpaRepository<E, T> repository,
                        GenericMapper<E, D> mapper) {
         this.repository = repository;
         this.mapper = mapper;
@@ -31,8 +31,7 @@ public abstract class BaseService<E, D, T> {
     }
 
     public D findById(T id) {
-        logger.info("Completed accessing repository '"
-                + repository.getClass().getSimpleName() + "'");
+        //repository.logMessage("Completed accessing repository!");
         D dto = mapper.toDto(repository.findById(id).orElse(null));
         logger.info("Completed coupling to controller: findById()");
         return dto;

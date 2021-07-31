@@ -1,27 +1,23 @@
 package com.gbsolutions.workfinder.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.util.UUID;
 
 @Data
-@Schema(description = "A User Object")
-public class ClientDto {
+public class EmployerDto {
 
     @JsonIgnore
-    private UUID id;
+    private String id;
 
-    @Size(min = 10, max = 100, message = "Field 'name' size is max. 100!")
+    @Size(max = 100, message = "Field 'name' size is max. 100!")
     @NotBlank(message = "Field 'name' mustn't be blanked!")
     private String name;
 
-    @Email(regexp=".*@.*\\..*", message = "Field 'email' is not valid!")
-    @NotBlank(message = "Field 'name' mustn't be blanked!")
+    @Email(message = "Field 'email' is not valid!")
     private String email;
 
 }

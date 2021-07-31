@@ -19,7 +19,9 @@ public abstract class BaseController<E, D, T, S extends BaseService<E, D, T>> {
 
     @GetMapping
     public List<D> findAllInRepo(){
+        logger.info("Start 'GET' request: findAll()");
+        List<D> list = service.findAllInRepo();
         logger.info("Completed 'GET' request: findAll()");
-        return service.findAllInRepo();
+        return list;
     }
 }

@@ -3,7 +3,7 @@ package com.gbsolutions.workfinder.service;
 import com.gbsolutions.workfinder.model.dto.JobDto;
 import com.gbsolutions.workfinder.model.entity.Job;
 import com.gbsolutions.workfinder.model.mapper.JobMapper;
-import com.gbsolutions.workfinder.repository.ClientRepository;
+import com.gbsolutions.workfinder.repository.EmployerRepository;
 import com.gbsolutions.workfinder.repository.JobRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,18 +19,18 @@ import java.util.stream.Collectors;
 public class JobService extends BaseService<Job, JobDto, Long> {
 
     @Autowired
-    private final ClientRepository clientRepository;
+    private final EmployerRepository employerRepository;
     @Autowired
     private final FetchApiService apiService;
 
     @Autowired
     public JobService(JobRepository jobRepository,
                       JobMapper jobMapper,
-                      ClientRepository clientRepository,
+                      EmployerRepository employerRepository,
                       FetchApiService apiService) {
 
         super(jobRepository, jobMapper);
-        this.clientRepository = clientRepository;
+        this.employerRepository = employerRepository;
         this.apiService = apiService;
     }
 
@@ -69,7 +69,7 @@ public class JobService extends BaseService<Job, JobDto, Long> {
         return allJobs;
     }
 
-    public boolean isValidApiKey(UUID uuid) {
-        return clientRepository.existsById(uuid);
+    public boolean isValidApiKey(String nanoId) {
+        return employerRepository.existsById(nanoId);
     }
 }
