@@ -19,5 +19,4 @@ public class Job {
     private String location;
     private String description;
     private URL url;
-
 }

@@ -4,6 +4,8 @@ import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -20,4 +22,6 @@ public class Client {
     @Column(unique = true)
     private String email;
 
+    @OneToMany
+    private List<Job> jobs = new ArrayList<>();
 }

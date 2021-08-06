@@ -1,11 +1,14 @@
 package com.gbsolutions.workfinder.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.gbsolutions.workfinder.model.entity.Job;
 import lombok.Data;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 public class EmployerDto {
@@ -20,4 +23,5 @@ public class EmployerDto {
     @Email(message = "Field 'email' is not valid!")
     private String email;
 
+    private List<Job> jobs = new ArrayList<>();
 }

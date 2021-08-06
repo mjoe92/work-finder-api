@@ -28,7 +28,7 @@ public class JobController
             ) {
         logger.info("Start 'GET' request: listJobsBy(String, String...)");
         List<JobDto> list = returnWithKeyCheck(service
-                .listJobsBy(title, location), apiKey);
+                .listJobsBy(apiKey, title, location), apiKey);
         logger.info("Completed 'GET' request: listJobsBy(String, String...)");
         return list;
     }

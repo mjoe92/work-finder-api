@@ -12,7 +12,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,23 +20,26 @@ public class JobService extends BaseService<Job, JobDto, Long> {
     @Autowired
     private final EmployerRepository employerRepository;
     @Autowired
-    private final FetchApiService apiService;
+    private final ApiFetchService apiFetchService;
 
     @Autowired
     public JobService(JobRepository jobRepository,
                       JobMapper jobMapper,
                       EmployerRepository employerRepository,
-                      FetchApiService apiService) {
+                      ApiFetchService apiFetchService) {
 
         super(jobRepository, jobMapper);
         this.employerRepository = employerRepository;
-        this.apiService = apiService;
+        this.apiFetchService = apiFetchService;
     }
 
-    public List<JobDto> getJobListFromApiBy(String title, String location) {
+    public List<JobDto> getJobListFromApiBy(String apiKey,
+                                            String title,
+                                            String location) {
         title = title == null ? "" : title;
         location = location == null ? "" : location;
-        return mapper.toDtoList(apiService.getJobListBy(title, location));
+        return mapper.toDtoList(apiFetchService
+                .getJobListBy(apiKey, title, location));
     }
 
     public Optional<URL> saveAndReturnUrl(Job job) {
@@ -56,11 +58,11 @@ public class JobService extends BaseService<Job, JobDto, Long> {
         return Optional.ofNullable(url);
     }
 
-    public List<JobDto> listJobsBy(String title, String location) {
+    public List<JobDto> listJobsBy(String apiKey, String title, String location) {
         final String titleFilter = (title == null ? "" : title);
         final String locationFilter = (location == null ? "" : location);
 
-        List<JobDto> allJobs = getJobListFromApiBy(title, location);
+        List<JobDto> allJobs = getJobListFromApiBy(apiKey, title, location);
         allJobs.addAll(findAllInRepo().stream()
                 .filter(job -> job.getTitle().contains(titleFilter)
                         && job.getLocation().contains(locationFilter))

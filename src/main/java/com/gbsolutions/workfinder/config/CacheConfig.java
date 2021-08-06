@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 public class CacheConfig {
     public CacheManager cacheManager() {
         return new ConcurrentMapCacheManager(
-                "api_job", "api_list"
+                "apiJob", "apiList"
         );
     }
 }
