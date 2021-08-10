@@ -2,6 +2,10 @@ package com.codecool.workfinder.logger;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.OK;
 
 public class PhaseLogger implements ConsoleLogger {
 
@@ -33,11 +37,17 @@ public class PhaseLogger implements ConsoleLogger {
             return 1;
         } else if (componentName.contains("convert")){
             return 2;
-        } else if (componentName.contains("repository")){
-            return 3;
         } else if (componentName.contains("service")){
+            return 3;
+        } else if (componentName.contains("repository")){
+            return 4;
+        } else if (componentName.contains("mapper")){
             return 4;
         }
         return 0;
+    }
+
+    public <M> HttpStatus getStatus(M model) {
+        return model != null ? OK : BAD_REQUEST;
     }
 }

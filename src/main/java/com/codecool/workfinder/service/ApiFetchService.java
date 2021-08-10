@@ -1,6 +1,8 @@
 package com.codecool.workfinder.service;
 
-import com.codecool.workfinder.model.api.adzuna.ApiJobCollection;
+import com.codecool.workfinder.logger.ConsoleLogger;
+import com.codecool.workfinder.logger.PhaseLogger;
+import com.codecool.workfinder.model.api.adzuna.AdzunaJobCollection;
 import com.codecool.workfinder.repository.ApiRepository;
 import com.codecool.workfinder.model.entity.Job;
 import org.springframework.stereotype.Service;
@@ -14,42 +16,31 @@ public class ApiFetchService {
 
     private final RestTemplate restTemplate;
     private final ApiRepository apiRepository;
-/*
-
-    @Value("${api}")
-    private String api = "adzuna";
-    @Value("${api_key}")
-    private String apiKey = "d4ef55f1641ed35a26713baa0fbf57fe";
-    @Value("${api_id}")
-    private String apiId = "6f3c5d06";
-*/
+    protected final ConsoleLogger logger;
 
     public ApiFetchService(RestTemplate restTemplate,
                            ApiRepository apiRepository) {
         this.restTemplate = restTemplate;
         this.apiRepository = apiRepository;
+        this.logger = new PhaseLogger(this.getClass());
     }
 
-    public ApiJobCollection getJobCollection(String apiName) {
+    public AdzunaJobCollection getJobCollection(String apiName) {
         return restTemplate.getForObject(
                 getApiUrl(apiName, "", ""),
-                ApiJobCollection.class
+                AdzunaJobCollection.class
         );
     }
 
     public List<Job> getJobListBy(String apiName, String title, String location) {
         return Objects.requireNonNull(restTemplate
-                .getForObject(getApiUrl(apiName, title, location), ApiJobCollection.class))
+                .getForObject(getApiUrl(apiName, title, location), AdzunaJobCollection.class))
                 .toJobList();
     }
 
     public String getApiUrl(String apiName, String title, String location) {
-        //String apiId = apiRepository.getById(apiName).getId();
-        //String apiKey = apiRepository.getById(apiName).getKey();
-        //mock
-        apiName = "adzuna";
-        String apiKey = "d4ef55f1641ed35a26713baa0fbf57fe";
-        String apiId = "6f3c5d06";
+        String apiId = apiRepository.getByName(apiName).getId();
+        String apiKey = apiRepository.getByName(apiName).getKey();
         switch (apiName) {
             case "adzuna":
                 return "https://api.adzuna.com/v1/api/jobs/gb/search/1?" +

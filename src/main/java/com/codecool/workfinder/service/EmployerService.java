@@ -1,5 +1,7 @@
 package com.codecool.workfinder.service;
 
+import com.aventrix.jnanoid.jnanoid.NanoIdUtils;
+import com.codecool.workfinder.repository.ClientRepository;
 import com.codecool.workfinder.repository.EmployerRepository;
 import com.codecool.workfinder.model.dto.EmployerDto;
 import com.codecool.workfinder.model.entity.Employer;
@@ -16,14 +18,23 @@ public class EmployerService extends BaseService<Employer, EmployerDto, String> 
         super(repository, employerMapper);
     }
 
-    @Override
-    public String deleteById(String nanoId) {
+    public EmployerDto deleteById(String nanoId) {
         repository.deleteById(nanoId);
-        return nanoId;
+        Employer employer = repository.getById(nanoId);
+        logInfoViaRepository("Completed accessing repository!");
+        EmployerDto employerDto = mapper.toDto(employer);
+        mapper.logInfo("Completed converting to EmployerDto!");
+        logger.info("Completed method: deleteById(String)!");
+        return employerDto;
     }
 
-    public String saveAndReturnId(Employer employer) {
+    public void save(EmployerDto employerDto) {
+        employerDto.setId(NanoIdUtils.randomNanoId());
+        Employer employer = mapper.toEntity(employerDto);
         repository.save(employer);
-        return employer.getId();
+    }
+
+    private void logInfoViaRepository(String message) {
+        ((EmployerRepository) repository).logMessage(message);
     }
 }

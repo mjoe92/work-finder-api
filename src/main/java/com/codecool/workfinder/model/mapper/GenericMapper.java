@@ -1,5 +1,7 @@
 package com.codecool.workfinder.model.mapper;
 
+import com.codecool.workfinder.logger.ConsoleLogger;
+import com.codecool.workfinder.logger.PhaseLogger;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -14,4 +16,10 @@ public interface GenericMapper<E, D> {
     D toDto(E entity);
     List<D> toDtoList(List<E> entityList);
     Set<D> toDtoSet(Set<D> entitySet);
+
+    default void logInfo(String message) {
+        ConsoleLogger logger = new PhaseLogger(this.getClass());
+        System.out.println(this.getClass().getSimpleName());
+        logger.info(message);
+    }
 }

@@ -10,9 +10,9 @@ import java.util.List;
 
 public abstract class BaseService<E, D, T> {
 
-    protected final JpaRepository<E, T> repository;
-    protected final GenericMapper<E, D> mapper;
-    protected final ConsoleLogger logger;
+    protected JpaRepository<E, T> repository;
+    protected GenericMapper<E, D> mapper;
+    protected ConsoleLogger logger;
 
     public BaseService(JpaRepository<E, T> repository,
                        GenericMapper<E, D> mapper) {
@@ -22,33 +22,23 @@ public abstract class BaseService<E, D, T> {
     }
 
     public List<D> findAllInRepo() {
-        List<D> list = new LinkedList<>();
-        logger.info("Completed accessing repository '"
-                + repository.getClass().getSimpleName() + "'");
-        repository.findAll().forEach(e -> list.add(mapper.toDto(e)));
+        String repoName = repository.getClass().getSimpleName();
+        List<E> entityList = repository.findAll();
+        logger.info("Completed accessing repository '" + repoName + "'");
+        List<D> dtoList = mapper.toDtoList(entityList);
+        mapper.logInfo("Completed converting to dtoList!");
         logger.info("Completed coupling to controller: findAllInRepo()");
-        return list;
+        return dtoList;
     }
 
     public D findById(T id) {
-        //repository.logMessage("Completed accessing repository!");
-        D dto = mapper.toDto(repository.findById(id).orElse(null));
+        String repoName = repository.getClass().getSimpleName();
+        E entity = repository.getById(id);
+        logger.info("Completed accessing repository '" + repoName + "'");
+        D dto = mapper.toDto(entity);
+        String dtoName = dto.getClass().getSimpleName();
+        mapper.logInfo("Completed converting to " + dtoName + "!");
         logger.info("Completed coupling to controller: findById()");
         return dto;
-    }
-
-    public void save(D dto) {
-        logger.info("Completed accessing repository '"
-                + repository.getClass().getSimpleName() + "'");
-        repository.save(mapper.toEntity(dto));
-        logger.info("Completed coupling to controller: save()");
-    }
-
-    public T deleteById(T id) {
-        logger.info("Completed accessing repository '"
-                + repository.getClass().getSimpleName() + "'");
-        repository.deleteById(id);
-        logger.info("Completed coupling to controller: deleteById()");
-        return id;
     }
 }

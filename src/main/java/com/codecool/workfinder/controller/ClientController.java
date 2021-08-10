@@ -38,24 +38,19 @@ public class ClientController extends BaseController<Client, ClientDto, UUID, Cl
     }
 
     @PostMapping
-    public UUID saveAndReturnId(@Valid @RequestBody ClientDto clientDto) {
-        logger.info("Start 'POST' request: save(ClientDto)");
-        UUID id = service.saveAndReturnId(clientDto);
+    public ResponseEntity<ClientDto> registerClient(
+            @Valid @RequestBody ClientDto clientDto) {
+        logger.info("Start 'POST' request: registerClient(ClientDto)");
+        HttpStatus status = logger.getStatus(clientDto);
+        service.save(clientDto);
         logger.info("Completed 'POST' request: save(ClientDto)");
-        return id;
-    }
-
-    @DeleteMapping("/{id}")
-    public void deleteById(@PathVariable String id) {
-        logger.info("Start 'DELETE' request: deleteById(String)");
-        service.deleteById(UUID.fromString(id));
-        logger.info("Completed 'DELETE' request: deleteById(String)");
+        return new ResponseEntity<>(clientDto, status);
     }
 
     @PutMapping("/{client_id}/job/{job_id}")
     public ResponseEntity<String> registerJobForClient(
             @PathVariable("client_id") String clientId,
-            @PathVariable("job_id") Long jobId) {
+            @PathVariable("job_id") String jobId) {
 
         logger.info("Start 'PUT' request: registerJobForClient(String, String)");
         ResponseEntity<ClientDto> clientEntity = findById(clientId);
@@ -65,7 +60,7 @@ public class ClientController extends BaseController<Client, ClientDto, UUID, Cl
         }
         ClientDto clientDto = clientEntity.getBody();
 
-        JobDto jobDto = jobService.findById(jobId);
+        JobDto jobDto = jobService.findById(UUID.fromString(jobId));
         if (jobDto == null) {
             return new ResponseEntity<>("No matching job id!", BAD_REQUEST);
         }

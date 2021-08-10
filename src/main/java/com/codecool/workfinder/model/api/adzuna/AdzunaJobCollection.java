@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ApiJobCollection {
+public class AdzunaJobCollection {
 
     @JsonProperty("results")
     private List<ApiJob> apiJobs;
@@ -23,6 +23,7 @@ public class ApiJobCollection {
         return apiJobs.stream().map(apiJob -> {
             Job job = new Job();
             job.setTitle(apiJob.getTitle());
+            job.setDescription(apiJob.getDescription());
             job.setLocation(apiJob.getLocation().getLocationName());
             try {
                 job.setUrl(new URL(apiJob.getUrl()));
@@ -39,9 +40,11 @@ public class ApiJobCollection {
 class ApiJob {
 
     private String title;
+    private ApiJobLocation location;
+
+    private String description;
     @JsonProperty("redirect_url")
     private String url;
-    private ApiJobLocation location;
 
 }
 

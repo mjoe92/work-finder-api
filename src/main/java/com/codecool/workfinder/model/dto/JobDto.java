@@ -6,12 +6,13 @@ import lombok.Data;
 
 import javax.validation.constraints.Size;
 import java.net.URL;
+import java.util.UUID;
 
 @Data
 public class JobDto {
 
     @JsonIgnore
-    private Long id;
+    private UUID id;
 
     @Size(max = 50, message = "Field 'title' size is max. 50!")
     @Schema(description = "Title of Job", example = "Java developer")

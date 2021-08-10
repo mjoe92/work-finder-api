@@ -8,9 +8,10 @@ import org.springframework.stereotype.Repository;
 
 import javax.validation.constraints.Size;
 import java.util.List;
+import java.util.UUID;
 
 @Repository
-public interface JobRepository extends JpaRepository<Job, Long> {
+public interface JobRepository extends JpaRepository<Job, UUID> {
     List<Job> findAll();
     List<Job> findAllByTitleOrLocation(
             @Size(max = 50, message = "Field 'title' size is max. 50!") String title,

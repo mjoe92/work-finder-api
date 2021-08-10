@@ -16,6 +16,18 @@ Követelmények:
 4. Érvényes api kulcs esetén az átadott adatokkal bekérdez a következő helyekre (pl.):
       Jooble
       Adzuna
+   
+Vezérlés:
+-  Job service:
+   1. GET   -   listJobsBy(@PathVariable String, @RequestParam String...)
+                return ResponseEntity(List<JobDto>) -> (jobs/{api_key})
+                no key requires
+      
+   2. POST  -   jobRegister(@PathVariable String, @RequestBody Job)
+                return ResponseEntity(JobDto) -> (jobs/{api_key})
+                employer_id requires
+      
+   3. DELETE-   deleteById(@PathVariable String, @PathVariable )
 
 Kiegészítések:
 1. Alap CRUD mindkettőre JSON objektum átvitellel + GET / POST a 

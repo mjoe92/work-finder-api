@@ -12,10 +12,11 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
-public class JobService extends BaseService<Job, JobDto, Long> {
+public class JobService extends BaseService<Job, JobDto, UUID> {
 
     @Autowired
     private final EmployerRepository employerRepository;
@@ -36,10 +37,15 @@ public class JobService extends BaseService<Job, JobDto, Long> {
     public List<JobDto> getJobListFromApiBy(String apiKey,
                                             String title,
                                             String location) {
+        logger.info("");
         title = title == null ? "" : title;
         location = location == null ? "" : location;
-        return mapper.toDtoList(apiFetchService
-                .getJobListBy(apiKey, title, location));
+        List<Job> jobList = apiFetchService
+                .getJobListBy(apiKey, title, location);
+        apiFetchService.logger.info("");
+        List<JobDto> jobDtoList = mapper.toDtoList(jobList);
+        mapper.logInfo("");
+        return jobDtoList;
     }
 
     public Optional<URL> saveAndReturnUrl(Job job) {
@@ -69,6 +75,16 @@ public class JobService extends BaseService<Job, JobDto, Long> {
                 .collect(Collectors.toList()));
 
         return allJobs;
+    }
+
+    public JobDto deleteById(UUID id) {
+        logger.info("Completed accessing repository '"
+                + repository.getClass().getSimpleName() + "'");
+        Job job = repository.getById(id);
+        repository.deleteById(id);
+        JobDto dto = mapper.toDto(job);
+        logger.info("Completed coupling to controller: deleteById()");
+        return dto;
     }
 
     public boolean isValidApiKey(String nanoId) {
