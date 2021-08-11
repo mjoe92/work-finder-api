@@ -25,25 +25,31 @@ public class ApiFetchService {
         this.logger = new PhaseLogger(this.getClass());
     }
 
-    public AdzunaJobCollection getJobCollection(String apiName) {
+    public AdzunaJobCollection getJobCollection(String apiName, String title, String location, Long pages) {
         return restTemplate.getForObject(
-                getApiUrl(apiName, "", ""),
+                getApiUrl(apiName, title, location, pages),
                 AdzunaJobCollection.class
         );
     }
 
-    public List<Job> getJobListBy(String apiName, String title, String location) {
-        return Objects.requireNonNull(restTemplate
-                .getForObject(getApiUrl(apiName, title, location), AdzunaJobCollection.class))
-                .toJobList();
+    public List<Job> getJobListBy(String apiName,
+                                  String title,
+                                  String location,
+                                  Long pages) {
+
+        logger.info("");
+        AdzunaJobCollection jobCollection = getJobCollection(apiName, title, location, pages);
+        List<Job> jobs = jobCollection.toJobList();
+        logger.info("");
+        return jobs;
     }
 
-    public String getApiUrl(String apiName, String title, String location) {
+    public String getApiUrl(String apiName, String title, String location, Long page) {
         String apiId = apiRepository.getByName(apiName).getId();
         String apiKey = apiRepository.getByName(apiName).getKey();
         switch (apiName) {
             case "adzuna":
-                return "https://api.adzuna.com/v1/api/jobs/gb/search/1?" +
+                return "https://api.adzuna.com/v1/api/jobs/gb/search/"+ page + "?" +
                         "app_id=" + apiId + "&" +
                         "app_key=" + apiKey + "&" +
                         "title_only=" + title + "&" +

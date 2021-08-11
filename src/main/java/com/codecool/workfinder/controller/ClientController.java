@@ -5,7 +5,9 @@ import com.codecool.workfinder.model.dto.JobDto;
 import com.codecool.workfinder.model.entity.Client;
 import com.codecool.workfinder.service.ClientService;
 import com.codecool.workfinder.service.JobService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.UUID;
 
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController
@@ -29,40 +31,43 @@ public class ClientController extends BaseController<Client, ClientDto, UUID, Cl
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ClientDto> findById(@PathVariable String id) {
+    @Operation(summary = "Find client by id!")
+    public ResponseEntity<?> findById(@PathVariable String id) {
         logger.info("Start 'GET' request: findById(String)");
-        ClientDto clientDto = service.findById(UUID.fromString(id));
-        HttpStatus status = clientDto != null ? OK : BAD_REQUEST;
+        ClientDto clientDto = service.findById(UUID.fromString(id)).orElse(null);
+        ResponseEntity<?> responseEntity = response.getEntityWithStatus(clientDto);
         logger.info("Completed 'GET' request: findById(String)");
-        return new ResponseEntity<>(clientDto, status);
+        return responseEntity;
     }
 
     @PostMapping
-    public ResponseEntity<ClientDto> registerClient(
+    @Operation(summary = "Register new client into repository!")
+    public ResponseEntity<?> registerClient(
             @Valid @RequestBody ClientDto clientDto) {
         logger.info("Start 'POST' request: registerClient(ClientDto)");
-        HttpStatus status = logger.getStatus(clientDto);
+        ResponseEntity<?> responseEntity = response.getEntityWithStatus(clientDto);
         service.save(clientDto);
         logger.info("Completed 'POST' request: save(ClientDto)");
-        return new ResponseEntity<>(clientDto, status);
+        return responseEntity;
     }
 
-    @PutMapping("/{client_id}/job/{job_id}")
-    public ResponseEntity<String> registerJobForClient(
+    @PutMapping("{client_id}/job/{job_id}")
+    @Operation(summary = "Assign a job for client!")
+    public ResponseEntity<String> applyJobForClient(
             @PathVariable("client_id") String clientId,
             @PathVariable("job_id") String jobId) {
 
         logger.info("Start 'PUT' request: registerJobForClient(String, String)");
-        ResponseEntity<ClientDto> clientEntity = findById(clientId);
+        ResponseEntity<?> clientEntity = findById(clientId);
         HttpStatus status = clientEntity.getStatusCode();
-        if (status == BAD_REQUEST) {
-            return new ResponseEntity<>("No matching client id!", BAD_REQUEST);
+        if (status == NOT_FOUND) {
+            return new ResponseEntity<>("No matching client id!", NOT_FOUND);
         }
-        ClientDto clientDto = clientEntity.getBody();
+        ClientDto clientDto = (ClientDto) clientEntity.getBody();
 
-        JobDto jobDto = jobService.findById(UUID.fromString(jobId));
+        JobDto jobDto = jobService.findById(UUID.fromString(jobId)).orElse(null);
         if (jobDto == null) {
-            return new ResponseEntity<>("No matching job id!", BAD_REQUEST);
+            return new ResponseEntity<>("No matching job id!", NOT_FOUND);
         }
 
         service.registerJobForClient(clientDto, jobDto);

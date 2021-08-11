@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 public abstract class BaseService<E, D, T> {
 
@@ -31,14 +32,17 @@ public abstract class BaseService<E, D, T> {
         return dtoList;
     }
 
-    public D findById(T id) {
+    public Optional<D> findById(T id) {
         String repoName = repository.getClass().getSimpleName();
-        E entity = repository.getById(id);
+        E entity = repository.findById(id).orElse(null);
+        if (entity == null) {
+            return Optional.empty();
+        }
         logger.info("Completed accessing repository '" + repoName + "'");
         D dto = mapper.toDto(entity);
         String dtoName = dto.getClass().getSimpleName();
         mapper.logInfo("Completed converting to " + dtoName + "!");
         logger.info("Completed coupling to controller: findById()");
-        return dto;
+        return Optional.of(dto);
     }
 }

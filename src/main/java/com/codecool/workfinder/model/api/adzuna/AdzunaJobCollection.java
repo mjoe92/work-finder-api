@@ -26,7 +26,7 @@ public class AdzunaJobCollection {
             job.setDescription(apiJob.getDescription());
             job.setLocation(apiJob.getLocation().getLocationName());
             try {
-                job.setUrl(new URL(apiJob.getUrl()));
+                job.setUrl(new URL(apiJob.getUrl()).toString());
             } catch (MalformedURLException e) {
                 ConsoleLogger logger = new PhaseLogger(this.getClass());
                 logger.error("Invalid URL!");

@@ -46,8 +46,4 @@ public class PhaseLogger implements ConsoleLogger {
         }
         return 0;
     }
-
-    public <M> HttpStatus getStatus(M model) {
-        return model != null ? OK : BAD_REQUEST;
-    }
 }

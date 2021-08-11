@@ -21,5 +21,5 @@ public class Job {
     private String title;
     private String location;
     private String description;
-    private URL url;
+    private String url;
 }

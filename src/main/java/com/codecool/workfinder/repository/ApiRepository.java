@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ApiRepository extends JpaRepository<Api, String> {
     Api getByName(String name);
-    default void logMessage(String message) {
+    default void logInfo(String message) {
         ConsoleLogger logger = new PhaseLogger(this.getClass());
         logger.info(message);
     }

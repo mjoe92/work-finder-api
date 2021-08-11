@@ -18,7 +18,7 @@ public interface JobRepository extends JpaRepository<Job, UUID> {
             @Size(max = 50, message = "Field 'location' size is max. 50!") String location
     );
 
-    default void logMessage(String message) {
+    default void logInfo(String message) {
         ConsoleLogger logger = new PhaseLogger(this.getClass());
         logger.info(message);
     }

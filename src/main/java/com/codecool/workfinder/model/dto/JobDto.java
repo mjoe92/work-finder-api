@@ -1,6 +1,5 @@
 package com.codecool.workfinder.model.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -11,7 +10,6 @@ import java.util.UUID;
 @Data
 public class JobDto {
 
-    @JsonIgnore
     private UUID id;
 
     @Size(max = 50, message = "Field 'title' size is max. 50!")
@@ -23,6 +21,6 @@ public class JobDto {
     private String location;
     @Schema(description = "Job description", example = "Great developer wanted for a idiot job...")
     private String description;
-    @Schema(description = "Url on api work site", example = "Budapest")
-    private URL url;
+    @Schema(description = "Url on api work site", example = "https://www.google.com/")
+    private String url;
 }

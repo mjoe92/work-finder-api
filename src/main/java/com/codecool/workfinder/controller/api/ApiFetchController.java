@@ -2,6 +2,7 @@ package com.codecool.workfinder.controller.api;
 
 import com.codecool.workfinder.model.api.adzuna.AdzunaJobCollection;
 import com.codecool.workfinder.service.ApiFetchService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
@@ -18,8 +19,9 @@ public class ApiFetchController {
 
     @Cacheable("apiJob")
     @GetMapping("{api_name}")
+    @Operation(summary = "List all jobs from Jobs APIs!")
     public AdzunaJobCollection getAllApiJobs(
             @PathVariable("api_name") String apiName) {
-        return service.getJobCollection(apiName);
+        return service.getJobCollection(apiName, "", "", 1L);
     }
 }

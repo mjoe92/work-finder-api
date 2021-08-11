@@ -1,3 +1,5 @@
 target/
 .idea
 .mvn/
+work-finder-api.log
+work-finder-api.log.2021-08-10.0.gz

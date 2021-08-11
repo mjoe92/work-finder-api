@@ -35,7 +35,8 @@ public class ClientService extends BaseService<Client, ClientDto, UUID> {
         Client client = mapper.toEntity(clientDto);
         mapper.logInfo("Completed converting to Client!");
         repository.save(client);
-        logInfoViaRepository("Completed method: save(Client)!");
+        logInfoViaRepository("Completed accessing repository!");
+        logger.info("Completed method: save(Client)!");
     }
 
     public Optional<JobDto> registerJobForClient(ClientDto clientDto,
@@ -46,6 +47,6 @@ public class ClientService extends BaseService<Client, ClientDto, UUID> {
     }
 
     private void logInfoViaRepository(String message) {
-        ((ClientRepository) repository).logMessage(message);
+        ((ClientRepository) repository).logInfo(message);
     }
 }

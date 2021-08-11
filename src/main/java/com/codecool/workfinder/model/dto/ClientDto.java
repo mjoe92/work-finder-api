@@ -1,7 +1,5 @@
 package com.codecool.workfinder.model.dto;
 
-import com.codecool.workfinder.model.entity.Job;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -16,7 +14,6 @@ import java.util.UUID;
 @Schema(description = "A User Object")
 public class ClientDto {
 
-    @JsonIgnore
     private UUID id;
 
     @Size(min = 10, max = 100, message = "Field 'name' size is max. 100!")
@@ -26,8 +23,8 @@ public class ClientDto {
 
     @Email(regexp=".+@.+\\..+", message = "Field 'email' is not valid!")
     @NotBlank(message = "Field 'name' mustn't be blanked!")
-    @Schema(description = "email of client", example = "john.doe@gmail.com")
+    @Schema(description = "Email of client", example = "john.doe@gmail.com")
     private String email;
 
-    private List<Job> jobs = new ArrayList<>();
+    private List<JobDto> jobs = new ArrayList<>();
 }
