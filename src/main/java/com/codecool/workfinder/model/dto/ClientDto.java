@@ -15,6 +15,7 @@ import java.util.UUID;
 @Schema(description = "A User Object")
 public class ClientDto {
 
+    @JsonIgnore
     private UUID id;
 
     @Size(min = 10, max = 100, message = "Field 'name' size is max. 100!")

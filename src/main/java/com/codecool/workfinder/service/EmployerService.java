@@ -54,6 +54,7 @@ public class EmployerService extends BaseService<Employer, EmployerDto, String> 
                 job.setId(UUID.randomUUID());
             }
             jobRepository.save(job);
+            jobRepository.logInfo("Completed accessing repository!");
         });
         repository.save(employer);
         logInfoViaRepository("Completed accessing repository!");

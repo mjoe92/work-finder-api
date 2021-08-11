@@ -1,6 +1,7 @@
 package com.codecool.workfinder.controller;
 
 import com.codecool.workfinder.model.dto.ClientDto;
+import com.codecool.workfinder.model.dto.EmployerDto;
 import com.codecool.workfinder.model.dto.JobDto;
 import com.codecool.workfinder.model.entity.Client;
 import com.codecool.workfinder.service.ClientService;
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
@@ -74,5 +76,15 @@ public class ClientController extends BaseController<Client, ClientDto, UUID, Cl
 
         logger.info("Completed 'PUT' request: registerJobForClient(String, String)");
         return new ResponseEntity<>("", HttpStatus.OK);
+    }
+
+    @DeleteMapping("{id}")
+    @Operation(summary = "Delete client by id!")
+    public ResponseEntity<?> deleteById(@PathVariable("id") String id){
+        logger.info("Start 'DELETE' method: delete(String)");
+        Optional<ClientDto> clientDto = service.deleteById(UUID.fromString(id));
+        ResponseEntity<?> responseEntity = response.getEntityWithStatus(clientDto.orElse(null));
+        logger.info("Completed 'DELETE' method: delete(String)");
+        return responseEntity;
     }
 }

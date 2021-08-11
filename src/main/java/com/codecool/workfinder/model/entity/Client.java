@@ -1,6 +1,5 @@
 package com.codecool.workfinder.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -14,8 +13,8 @@ import java.util.UUID;
 public class Client {
 
     @Id
-    //@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "uuid")
-    //@GenericGenerator(name = "uuid", strategy = "uuid2")
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "uuid")
+    @GenericGenerator(name = "uuid", strategy = "uuid2")
     private UUID id;
 
     private String name;
@@ -23,7 +22,6 @@ public class Client {
     @Column(unique = true)
     private String email;
 
-    @ManyToMany(mappedBy = "clients", cascade = CascadeType.ALL)
-    @JsonIgnoreProperties("clients")
+    @OneToMany
     private List<Job> jobs = new ArrayList<>();
 }
