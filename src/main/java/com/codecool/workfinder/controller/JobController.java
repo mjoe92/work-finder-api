@@ -49,14 +49,13 @@ public class JobController
         return jobDto;
     }
 
-    @DeleteMapping("{api_key}/{id}")
+    @DeleteMapping("{id}")
     @Operation(summary = "Delete job by id in repository!")
     public JobDto deleteById(
-            @PathVariable("api_key") String apiKey,
             @PathVariable("id") UUID id) {
 
         logger.info("Start 'DELETE' request: jobRegister(String, Long)");
-        JobDto jobDto = returnWithApiCheck(service.deleteById(id), apiKey);
+        JobDto jobDto = service.deleteById(id);
         logger.info("Completed 'DELETE' request: jobRegister(String, Long)");
         return jobDto;
     }

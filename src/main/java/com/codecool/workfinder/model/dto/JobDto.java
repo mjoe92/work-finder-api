@@ -4,12 +4,12 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import javax.validation.constraints.Size;
-import java.net.URL;
 import java.util.UUID;
 
 @Data
 public class JobDto {
 
+    @Schema(example = "3fa85f64-5717-4562-b3fc-2c963f66afa6")
     private UUID id;
 
     @Size(max = 50, message = "Field 'title' size is max. 50!")

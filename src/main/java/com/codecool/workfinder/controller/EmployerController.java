@@ -4,6 +4,7 @@ import com.codecool.workfinder.model.dto.EmployerDto;
 import com.codecool.workfinder.model.dto.JobDto;
 import com.codecool.workfinder.model.entity.Employer;
 import com.codecool.workfinder.service.EmployerService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +25,7 @@ public class EmployerController extends BaseController<Employer, EmployerDto, St
     }
 
     @GetMapping("{id}")
+    @Operation(summary = "Find employer by id!")
     public ResponseEntity<?> findById(@PathVariable String id) {
         logger.info("Start 'GET' request: findById(String)");
         Optional<EmployerDto> employerDto = service.findById(id);
@@ -33,6 +35,7 @@ public class EmployerController extends BaseController<Employer, EmployerDto, St
     }
 
     @PostMapping
+    @Operation(summary = "Register new employer into repository!")
     public ResponseEntity<?> registerEmployer(
             @Valid @RequestBody EmployerDto employerDto) {
         logger.info("Start 'POST' request: registerEmployer(EmployerDto)");
@@ -43,6 +46,7 @@ public class EmployerController extends BaseController<Employer, EmployerDto, St
     }
 
     @PutMapping("{employer_id}/job")
+    @Operation(summary = "Create a job for employer!")
     public ResponseEntity<?> createJobToEmployer(
             @Valid @RequestBody JobDto jobDto,
             @PathVariable("employer_id") String employerId) {
@@ -59,6 +63,7 @@ public class EmployerController extends BaseController<Employer, EmployerDto, St
     }
 
     @DeleteMapping("{id}")
+    @Operation(summary = "Delete job by id!")
     public ResponseEntity<?> deleteById(@PathVariable("id") String id){
         logger.info("Start 'DELETE' method: delete(String)");
         Optional<EmployerDto> employerDto = service.deleteById(id);

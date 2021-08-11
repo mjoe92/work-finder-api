@@ -19,7 +19,7 @@ public class ApiFetchController {
 
     @Cacheable("apiJob")
     @GetMapping("{api_name}")
-    @Operation(summary = "List all jobs from Jobs APIs!")
+    @Operation(summary = "List all jobs from Jobs APIs without filters (only for testing)!")
     public AdzunaJobCollection getAllApiJobs(
             @PathVariable("api_name") String apiName) {
         return service.getJobCollection(apiName, "", "", 1L);

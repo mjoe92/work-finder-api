@@ -1,5 +1,6 @@
 package com.codecool.workfinder.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -12,6 +13,7 @@ import java.util.List;
 @Data
 public class EmployerDto {
 
+    @Schema(example = "V1StGXR8_Z5jdHi6B-myT")
     private String id;
 
     @Size(max = 100, message = "Field 'name' size is max. 100!")

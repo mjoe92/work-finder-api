@@ -5,6 +5,7 @@ import com.codecool.workfinder.handler.HttpResponseHandler;
 import com.codecool.workfinder.logger.ConsoleLogger;
 import com.codecool.workfinder.logger.PhaseLogger;
 import com.codecool.workfinder.service.BaseService;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,10 +27,11 @@ public abstract class BaseController<E, D, T, S extends BaseService<E, D, T>> {
     }
 
     @GetMapping
+    @Operation(summary = "List all in repository!")
     public ResponseEntity<?> findAllInRepo(){
         logger.info("Start 'GET' request: findAll()");
         List<D> list = service.findAllInRepo();
-        ResponseEntity<?> responseEntity = response.getEntityWithStatus(list.size());
+        ResponseEntity<?> responseEntity = response.getEntityWithStatus(list);
         logger.info("Completed 'GET' request: findAll()");
         return responseEntity;
     }

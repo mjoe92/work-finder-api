@@ -1,11 +1,9 @@
 package com.codecool.workfinder.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +19,7 @@ public class Employer {
     @Column(unique = true)
     private String email;
 
-    @OneToMany
+    @ManyToMany(mappedBy = "employers", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("employers")
     private List<Job> jobs = new ArrayList<>();
 }

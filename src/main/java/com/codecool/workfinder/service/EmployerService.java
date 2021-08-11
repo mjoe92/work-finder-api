@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class EmployerService extends BaseService<Employer, EmployerDto, String> {
@@ -43,10 +44,17 @@ public class EmployerService extends BaseService<Employer, EmployerDto, String> 
     }
 
     public void save(EmployerDto employerDto) {
-        employerDto.setId(NanoIdUtils.randomNanoId());
+        if (employerDto.getId() == null) {
+            employerDto.setId(NanoIdUtils.randomNanoId());
+        }
         Employer employer = mapper.toEntity(employerDto);
         mapper.logInfo("Completed converting to Employer!");
-        employer.getJobs().forEach(jobRepository::save);
+        employer.getJobs().forEach(job -> {
+            if (job.getId() == null) {
+                job.setId(UUID.randomUUID());
+            }
+            jobRepository.save(job);
+        });
         repository.save(employer);
         logInfoViaRepository("Completed accessing repository!");
         logger.info("Completed method: save(Employer)!");
