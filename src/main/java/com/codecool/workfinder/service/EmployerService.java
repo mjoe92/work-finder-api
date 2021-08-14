@@ -35,12 +35,18 @@ public class EmployerService extends BaseService<Employer, EmployerDto, String> 
         if (employer == null) {
             return Optional.empty();
         }
+        //deleteAllJobsOfEmployers(nanoId);
         repository.deleteById(nanoId);
         logInfoViaRepository("Completed accessing repository!");
+
         EmployerDto employerDto = mapper.toDto(employer);
         mapper.logInfo("Completed converting to EmployerDto!");
         logger.info("Completed method: deleteById(String)!");
         return Optional.of(employerDto);
+    }
+
+    private void deleteAllJobsOfEmployers(String nanoId) {
+        jobRepository.deleteAllByEmployer_Id(nanoId);
     }
 
     public void save(EmployerDto employerDto) {
@@ -67,7 +73,7 @@ public class EmployerService extends BaseService<Employer, EmployerDto, String> 
         return repository.existsById(employerId);
     }
 
-    public void createJobToEmployer(JobDto jobDto, String employerId) {
+    public void addJobToEmployer(JobDto jobDto, String employerId) {
         Job job = jobMapper.toEntity(jobDto);
         jobMapper.logInfo("Completed converting to Job!");
         Employer employer = repository.getById(employerId);

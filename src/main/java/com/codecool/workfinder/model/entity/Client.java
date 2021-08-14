@@ -12,12 +12,12 @@ import java.util.UUID;
 @Entity
 public class Client {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
-    private UUID id;
-
     private String name;
+    @Id
+    //@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "uuid")
+    //@GenericGenerator(name = "uuid", strategy = "uuid2")
+    private String id;
+
 
     @Column(unique = true)
     private String email;

@@ -1,6 +1,5 @@
 package com.codecool.workfinder.model.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -15,13 +14,13 @@ import java.util.UUID;
 @Schema(description = "A User Object")
 public class ClientDto {
 
-    @JsonIgnore
-    private UUID id;
-
-    @Size(min = 10, max = 100, message = "Field 'name' size is max. 100!")
+    @Size(max = 100, message = "Field 'name' size is max. 100!")
     @NotBlank(message = "Field 'name' mustn't be blanked!")
     @Schema(description = "Name of client", example = "John Doe")
     private String name;
+    @Schema(example = "7422ea93-844b-437b-8f40-3c6b82221e14")
+    private String id;
+
 
     @Email(regexp=".+@.+\\..+", message = "Field 'email' is not valid!")
     @NotBlank(message = "Field 'name' mustn't be blanked!")
@@ -29,4 +28,10 @@ public class ClientDto {
     private String email;
 
     private List<JobDto> jobs = new ArrayList<>();
+
+    public void generateAndSetUUID() {
+        if (id == null || id.equals("")) {
+            setId(String.valueOf(UUID.randomUUID()));
+        }
+    }
 }

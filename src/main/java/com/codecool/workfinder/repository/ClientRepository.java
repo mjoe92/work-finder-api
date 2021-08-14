@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.UUID;
 
 @Repository
-public interface ClientRepository extends JpaRepository<Client, UUID> {
+public interface ClientRepository extends JpaRepository<Client, String> {
     default void logInfo(String message) {
         ConsoleLogger logger = new PhaseLogger(this.getClass());
         logger.info(message);

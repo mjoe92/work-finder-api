@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Tag(name = "Work API fetcher - Testing environment")
-public class ApiFetchController {
+public class ApiJobController {
 
     @Autowired
     private ApiFetchService service;

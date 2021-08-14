@@ -2,9 +2,7 @@ package com.codecool.workfinder.model.entity;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import java.util.UUID;
 
 @Data
@@ -25,7 +23,7 @@ public class Job {
     private String url;
     private Integer minSalary;
     private Integer maxSalary;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Employer employer = new Employer();
 
     public void setContractTime(String contractTime) {

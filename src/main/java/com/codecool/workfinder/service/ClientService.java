@@ -15,7 +15,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-public class ClientService extends BaseService<Client, ClientDto, UUID> {
+public class ClientService extends BaseService<Client, ClientDto, String> {
 
     private final JobRepository jobRepository;
     private final JobMapper jobMapper;
@@ -29,7 +29,7 @@ public class ClientService extends BaseService<Client, ClientDto, UUID> {
         this.jobMapper = jobMapper;
     }
 
-    public Optional<ClientDto> deleteById(UUID uuid) {
+    public Optional<ClientDto> deleteById(String uuid) {
         Client client = repository.findById(uuid).orElse(null);
         if (client == null) {
             return Optional.empty();
@@ -43,9 +43,7 @@ public class ClientService extends BaseService<Client, ClientDto, UUID> {
     }
 
     public void save(ClientDto clientDto) {
-        if (clientDto.getId() == null) {
-            clientDto.setId(UUID.randomUUID());
-        }
+        clientDto.generateAndSetUUID();
         Client client = mapper.toEntity(clientDto);
         mapper.logInfo("Completed converting to Client!");
         client.getJobs().forEach(job -> {

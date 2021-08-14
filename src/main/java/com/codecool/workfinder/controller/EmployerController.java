@@ -14,11 +14,13 @@ import javax.validation.Valid;
 import java.util.Optional;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 @RequestMapping("employers")
 @Tag(name = "Employer service", description = "Job management for companies")
-public class EmployerController extends BaseController<Employer, EmployerDto, String, EmployerService> {
+public class EmployerController
+        extends BaseController<Employer, EmployerDto, String, EmployerService> {
 
     protected EmployerController(EmployerService service) {
         super(service);
@@ -27,6 +29,7 @@ public class EmployerController extends BaseController<Employer, EmployerDto, St
     @GetMapping("{id}")
     @Operation(summary = "Find employer by id!")
     public ResponseEntity<?> findById(@PathVariable String id) {
+
         logger.info("Start 'GET' request: findById(String)");
         Optional<EmployerDto> employerDto = service.findById(id);
         ResponseEntity<?> responseEntity = response.getEntityWithStatus(employerDto.orElse(null));
@@ -38,6 +41,7 @@ public class EmployerController extends BaseController<Employer, EmployerDto, St
     @Operation(summary = "Register new employer into repository!")
     public ResponseEntity<?> registerEmployer(
             @Valid @RequestBody EmployerDto employerDto) {
+
         logger.info("Start 'POST' request: registerEmployer(EmployerDto)");
         service.save(employerDto);
         ResponseEntity<?> responseEntity = response.getEntityWithStatus(employerDto);
@@ -56,15 +60,16 @@ public class EmployerController extends BaseController<Employer, EmployerDto, St
         if (!isRegistered) {
             return new ResponseEntity<>("No matching employer id!", NOT_FOUND);
         }
-        service.createJobToEmployer(jobDto, employerId);
+        service.addJobToEmployer(jobDto, employerId);
         ResponseEntity<?> responseEntity = response.getEntityWithStatus(jobDto);
         logger.info("Completed 'PUT' request: createJobForEmployer(EmployerDto)");
         return responseEntity;
     }
 
     @DeleteMapping("{id}")
-    @Operation(summary = "Delete job by id!")
+    @Operation(summary = "Delete employer with all jobs by id!")
     public ResponseEntity<?> deleteById(@PathVariable("id") String id){
+
         logger.info("Start 'DELETE' method: delete(String)");
         Optional<EmployerDto> employerDto = service.deleteById(id);
         ResponseEntity<?> responseEntity = response.getEntityWithStatus(employerDto.orElse(null));

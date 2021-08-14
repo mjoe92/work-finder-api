@@ -51,7 +51,8 @@ public class JobDto {
     private Integer maxSalary;
 
     @JsonProperty("employer")
-    @JsonIgnoreProperties("employers")
+    @JsonIgnoreProperties({"jobs"})
+    //@JsonIgnoreProperties({"name", "company", "email", "jobs"})
     private EmployerDto employerDto;
 
     public void generateAndSetUUID() {

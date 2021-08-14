@@ -13,14 +13,14 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Optional;
-import java.util.UUID;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @RestController
 @RequestMapping("/clients")
 @Tag(name = "Client service", description = "Signing applicants, employees")
-public class ClientController extends BaseController<Client, ClientDto, UUID, ClientService> {
+public class ClientController
+        extends BaseController<Client, ClientDto, String, ClientService> {
 
     private final JobService jobService;
 
@@ -32,8 +32,9 @@ public class ClientController extends BaseController<Client, ClientDto, UUID, Cl
     @GetMapping("/{id}")
     @Operation(summary = "Find client by id!")
     public ResponseEntity<?> findById(@PathVariable String id) {
+
         logger.info("Start 'GET' request: findById(String)");
-        ClientDto clientDto = service.findById(UUID.fromString(id)).orElse(null);
+        ClientDto clientDto = service.findById(id).orElse(null);
         ResponseEntity<?> responseEntity = response.getEntityWithStatus(clientDto);
         logger.info("Completed 'GET' request: findById(String)");
         return responseEntity;
@@ -43,6 +44,7 @@ public class ClientController extends BaseController<Client, ClientDto, UUID, Cl
     @Operation(summary = "Register new client into repository!")
     public ResponseEntity<?> registerClient(
             @Valid @RequestBody ClientDto clientDto) {
+
         logger.info("Start 'POST' request: registerClient(ClientDto)");
         ResponseEntity<?> responseEntity = response.getEntityWithStatus(clientDto);
         service.save(clientDto);
@@ -51,7 +53,7 @@ public class ClientController extends BaseController<Client, ClientDto, UUID, Cl
     }
 
     @PutMapping("{client_id}/job/{job_id}")
-    @Operation(summary = "Assign a job for client!")
+    @Operation(summary = "Apply job for client!")
     public ResponseEntity<String> applyJobForClient(
             @PathVariable("client_id") String clientId,
             @PathVariable("job_id") String jobId) {
@@ -65,7 +67,7 @@ public class ClientController extends BaseController<Client, ClientDto, UUID, Cl
         }
         ClientDto clientDto = (ClientDto) clientEntity.getBody();
 
-        JobDto jobDto = jobService.findById(UUID.fromString(jobId)).orElse(null);
+        JobDto jobDto = jobService.findById(jobId).orElse(null);
         if (jobDto == null) {
             return new ResponseEntity<>("No matching job id!", NOT_FOUND);
         }
@@ -79,8 +81,9 @@ public class ClientController extends BaseController<Client, ClientDto, UUID, Cl
     @DeleteMapping("{id}")
     @Operation(summary = "Delete client by id!")
     public ResponseEntity<?> deleteById(@PathVariable("id") String id){
+
         logger.info("Start 'DELETE' method: delete(String)");
-        Optional<ClientDto> clientDto = service.deleteById(UUID.fromString(id));
+        Optional<ClientDto> clientDto = service.deleteById(id);
         ResponseEntity<?> responseEntity = response.getEntityWithStatus(clientDto.orElse(null));
         logger.info("Completed 'DELETE' method: delete(String)");
         return responseEntity;

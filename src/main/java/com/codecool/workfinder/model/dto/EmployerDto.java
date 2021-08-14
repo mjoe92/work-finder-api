@@ -1,8 +1,6 @@
 package com.codecool.workfinder.model.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonIgnoreType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -30,5 +28,6 @@ public class EmployerDto {
     @Schema(description = "Email address of employer", example = "jane.doe@gmail.com")
     private String email;
 
+    @JsonIgnoreProperties("employer")
     private List<JobDto> jobs = new ArrayList<>();
 }

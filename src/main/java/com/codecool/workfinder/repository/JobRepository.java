@@ -11,12 +11,8 @@ import java.util.List;
 import java.util.UUID;
 
 @Repository
-public interface JobRepository extends JpaRepository<Job, UUID> {
-    List<Job> findAll();
-    List<Job> findAllByTitleOrLocation(
-            @Size(max = 50, message = "Field 'title' size is max. 50!") String title,
-            @Size(max = 50, message = "Field 'location' size is max. 50!") String location
-    );
+public interface JobRepository extends JpaRepository<Job, String> {
+    void deleteAllByEmployer_Id(String id);
 
     default void logInfo(String message) {
         ConsoleLogger logger = new PhaseLogger(this.getClass());
