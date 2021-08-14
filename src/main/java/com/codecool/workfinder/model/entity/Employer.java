@@ -15,12 +15,10 @@ public class Employer {
 
     @Id
     private String id;
-
     private String name;
-
+    private String company;
     @Column(unique = true)
     private String email;
-
     @OneToMany
     private List<Job> jobs = new ArrayList<>();
 }

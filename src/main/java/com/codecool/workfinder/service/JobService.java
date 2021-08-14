@@ -52,13 +52,24 @@ public class JobService extends BaseService<Job, JobDto, UUID> {
     }
 
     public JobDto save(JobDto jobDto) {
+
         URL url = getLocalUrl(jobDto);
         jobDto.setUrl(url.toString());
+        jobDto = (JobDto) fillDtoProperties(jobDto);
         Job job = mapper.toEntity(jobDto);
         mapper.logInfo("");
         repository.save(job);
         ((JobRepository) repository).logInfo("");
         return jobDto;
+    }
+
+    private Object fillDtoProperties(Object object) {
+        if (object instanceof JobDto) {
+            JobDto jobDto = (JobDto) object;
+            jobDto.generateAndSetUUID();
+            return jobDto;
+        }
+        return object;
     }
 
     private URL getLocalUrl(JobDto jobDto) {

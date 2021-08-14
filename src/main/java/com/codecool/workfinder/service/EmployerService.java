@@ -50,9 +50,7 @@ public class EmployerService extends BaseService<Employer, EmployerDto, String> 
         Employer employer = mapper.toEntity(employerDto);
         mapper.logInfo("Completed converting to Employer!");
         employer.getJobs().forEach(job -> {
-            if (job.getId() == null) {
-                job.setId(UUID.randomUUID());
-            }
+            job.generateAndSetUUID();
             jobRepository.save(job);
             jobRepository.logInfo("Completed accessing repository!");
         });

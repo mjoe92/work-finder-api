@@ -46,7 +46,7 @@ public class EmployerController extends BaseController<Employer, EmployerDto, St
     }
 
     @PutMapping("{employer_id}/job")
-    @Operation(summary = "Create a job for employer!")
+    @Operation(summary = "Add an existing job for employer!")
     public ResponseEntity<?> createJobToEmployer(
             @Valid @RequestBody JobDto jobDto,
             @PathVariable("employer_id") String employerId) {

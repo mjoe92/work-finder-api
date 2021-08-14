@@ -1,14 +1,10 @@
 package com.codecool.workfinder.model.api.adzuna;
 
-import com.codecool.workfinder.logger.ConsoleLogger;
+import com.codecool.workfinder.model.entity.Job;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.codecool.workfinder.logger.PhaseLogger;
-import com.codecool.workfinder.model.entity.Job;
 import lombok.Data;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,15 +18,17 @@ public class AdzunaJobCollection {
     public List<Job> toJobList() {
         return apiJobs.stream().map(apiJob -> {
             Job job = new Job();
+            job.setId("ADZUNA_" + apiJob.getId());
+            job.setCategory(apiJob.getCategory().getLabel());
             job.setTitle(apiJob.getTitle());
-            job.setDescription(apiJob.getDescription());
             job.setLocation(apiJob.getLocation().getLocationName());
-            try {
-                job.setUrl(new URL(apiJob.getUrl()).toString());
-            } catch (MalformedURLException e) {
-                ConsoleLogger logger = new PhaseLogger(this.getClass());
-                logger.error("Invalid URL!");
-            }
+            job.setCreated(apiJob.getCreated());
+            job.setDescription(apiJob.getDescription());
+            job.setCompany(apiJob.getCompany().getDisplayName());
+            job.setContractTime(apiJob.getContractTime());
+            job.setUrl(apiJob.getUrl());
+            job.setMinSalary(apiJob.getMinSalary());
+            job.setMaxSalary(apiJob.getMaxSalary());
             return job;
         }).collect(Collectors.toList());
     }
@@ -39,19 +37,44 @@ public class AdzunaJobCollection {
 @Data
 class ApiJob {
 
+    private String id;
     private String title;
-    private ApiJobLocation location;
-
+    private Location location;
+    @JsonProperty("contract_time")
+    private String contractTime;
+    private String created;
     private String description;
     @JsonProperty("redirect_url")
     private String url;
+    @JsonProperty("salary_min")
+    private Integer minSalary;
+    @JsonProperty("salary_max")
+    private Integer maxSalary;
+    private Company company;
+    private Category category;
 
-}
+    @Data
+    static class Company {
 
-@Data
-class ApiJobLocation {
+        @JsonProperty("display_name")
+        private String displayName;
 
-    @JsonProperty("display_name")
-    private String locationName;
+    }
 
+    @Data
+    static class Location {
+
+        @JsonProperty("display_name")
+        private String locationName;
+        private List<String> area;
+
+    }
+
+    @Data
+    static class Category {
+
+        private String label;
+        private String tag;
+
+    }
 }

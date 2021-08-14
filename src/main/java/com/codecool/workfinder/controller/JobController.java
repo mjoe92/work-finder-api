@@ -23,7 +23,7 @@ public class JobController
     }
 
     @GetMapping("{api_name}")
-    @Operation(summary = "List all jobs from repository and Jobs APIs!")
+    @Operation(summary = "List all jobs from repository and Jobs APIs with filters!")
     public ResponseEntity<?> listJobsBy(
             @PathVariable("api_name") String apiName,
             @RequestParam Long pages,
@@ -49,6 +49,14 @@ public class JobController
         return jobDto;
     }
 
+    private <R> R returnWithApiCheck(R response, String employerId) {
+        if (service.isValidEmployer(employerId)) {
+            return response;
+        }
+        logger.error("Invalid API name!");
+        return null;
+    }
+
     @DeleteMapping("{id}")
     @Operation(summary = "Delete job by id in repository!")
     public JobDto deleteById(
@@ -58,13 +66,5 @@ public class JobController
         JobDto jobDto = service.deleteById(id);
         logger.info("Completed 'DELETE' request: jobRegister(String, Long)");
         return jobDto;
-    }
-
-    private <R> R returnWithApiCheck(R response, String employerId) {
-        if (service.isValidEmployer(employerId)) {
-            return response;
-        }
-        logger.error("Invalid API name!");
-        return null;
     }
 }

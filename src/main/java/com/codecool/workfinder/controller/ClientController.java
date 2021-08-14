@@ -1,14 +1,12 @@
 package com.codecool.workfinder.controller;
 
 import com.codecool.workfinder.model.dto.ClientDto;
-import com.codecool.workfinder.model.dto.EmployerDto;
 import com.codecool.workfinder.model.dto.JobDto;
 import com.codecool.workfinder.model.entity.Client;
 import com.codecool.workfinder.service.ClientService;
 import com.codecool.workfinder.service.JobService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +16,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
-import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 @RequestMapping("/clients")
@@ -61,6 +58,7 @@ public class ClientController extends BaseController<Client, ClientDto, UUID, Cl
 
         logger.info("Start 'PUT' request: registerJobForClient(String, String)");
         ResponseEntity<?> clientEntity = findById(clientId);
+
         HttpStatus status = clientEntity.getStatusCode();
         if (status == NOT_FOUND) {
             return new ResponseEntity<>("No matching client id!", NOT_FOUND);

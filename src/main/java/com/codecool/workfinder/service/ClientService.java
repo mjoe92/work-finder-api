@@ -49,10 +49,8 @@ public class ClientService extends BaseService<Client, ClientDto, UUID> {
         Client client = mapper.toEntity(clientDto);
         mapper.logInfo("Completed converting to Client!");
         client.getJobs().forEach(job -> {
-            if (job.getId() == null) {
-                job.setId(UUID.randomUUID());
-            }
-
+            job.generateAndSetUUID();
+            jobRepository.save(job);
         });
         repository.save(client);
         logInfoViaRepository("Completed accessing repository!");
