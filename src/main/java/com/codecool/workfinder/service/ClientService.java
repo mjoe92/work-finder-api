@@ -29,44 +29,38 @@ public class ClientService extends BaseService<Client, ClientDto, String> {
         this.jobMapper = jobMapper;
     }
 
-    public Optional<ClientDto> deleteById(String uuid) {
-        Client client = repository.findById(uuid).orElse(null);
-        if (client == null) {
-            return Optional.empty();
-        }
-        repository.deleteById(uuid);
-        logInfoViaRepository("Completed accessing repository!");
-        ClientDto clientDto = mapper.toDto(client);
-        mapper.logInfo("Completed converting to ClientDto!");
-        logger.info("Completed method: deleteById(UUID)!");
-        return Optional.of(clientDto);
-    }
-
     public void save(ClientDto clientDto) {
         clientDto.generateAndSetUUID();
         Client client = mapper.toEntity(clientDto);
         mapper.logInfo("Completed converting to Client!");
-        client.getJobs().forEach(job -> {
-            job.generateAndSetUUID();
-            jobRepository.save(job);
-        });
         repository.save(client);
         logInfoViaRepository("Completed accessing repository!");
         logger.info("Completed method: save(Client)!");
     }
 
-    public void registerJobForClient(ClientDto clientDto,
-                                     JobDto jobDto) {
+    public void addJobForClient(ClientDto clientDto,
+                                JobDto jobDto) {
 
         Client client = mapper.toEntity(clientDto);
         mapper.logInfo("Completed converting to Client!");
         Job job = jobMapper.toEntity(jobDto);
+        jobMapper.logInfo("Completing converting to Job");
         client.getJobs().add(job);
-        mapper.logInfo("Completed converting to Job!");
-        jobRepository.save(job);
-        jobRepository.logInfo("Completed accessing repository!");
         repository.save(client);
         logInfoViaRepository("Completed accessing repository!");
+    }
+
+    public Optional<ClientDto> deleteById(String uuid) {
+        Client client = repository.findById(uuid).orElse(null);
+        if (client == null) {
+            return Optional.empty();
+        }
+        ClientDto clientDto = mapper.toDto(client);
+        repository.deleteById(uuid);
+        logInfoViaRepository("Completed accessing repository!");
+        mapper.logInfo("Completed converting to ClientDto!");
+        logger.info("Completed method: deleteById(UUID)!");
+        return Optional.of(clientDto);
     }
 
     private void logInfoViaRepository(String message) {

@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Data
@@ -18,7 +19,7 @@ public class AdzunaJobCollection {
     public List<Job> toJobList() {
         return apiJobs.stream().map(apiJob -> {
             Job job = new Job();
-            job.setId("ADZUNA_" + apiJob.getId());
+            job.setId(apiJob.getId());
             job.setCategory(apiJob.getCategory().getLabel());
             job.setTitle(apiJob.getTitle());
             job.setLocation(apiJob.getLocation().getLocationName());

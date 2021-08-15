@@ -7,7 +7,6 @@ import com.codecool.workfinder.service.ClientService;
 import com.codecool.workfinder.service.JobService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -54,28 +53,29 @@ public class ClientController
 
     @PutMapping("{client_id}/job/{job_id}")
     @Operation(summary = "Apply job for client!")
-    public ResponseEntity<String> applyJobForClient(
+    public ResponseEntity<?> applyJobForClient(
             @PathVariable("client_id") String clientId,
             @PathVariable("job_id") String jobId) {
 
         logger.info("Start 'PUT' request: registerJobForClient(String, String)");
-        ResponseEntity<?> clientEntity = findById(clientId);
 
-        HttpStatus status = clientEntity.getStatusCode();
-        if (status == NOT_FOUND) {
-            return new ResponseEntity<>("No matching client id!", NOT_FOUND);
-        }
-        ClientDto clientDto = (ClientDto) clientEntity.getBody();
-
-        JobDto jobDto = jobService.findById(jobId).orElse(null);
-        if (jobDto == null) {
-            return new ResponseEntity<>("No matching job id!", NOT_FOUND);
+        ResponseEntity<?> clientEntity = response
+                .getEntityWithStatus(service.findById(clientId).orElse(null));
+        if (clientEntity.getStatusCode() == NOT_FOUND) {
+            //clientEntity.getHeaders().add("problem", "Client doesn't exist!");
+            return clientEntity;
         }
 
-        service.registerJobForClient(clientDto, jobDto);
+        ResponseEntity<?> jobEntity = response
+                .getEntityWithStatus(jobService.findById(jobId).orElse(null));
+        if (jobEntity.getStatusCode() == NOT_FOUND) {
+            //jobEntity.getHeaders().add("problem", "Job doesn't exist!");
+            return jobEntity;
+        }
 
+        service.addJobForClient((ClientDto) clientEntity.getBody(), (JobDto) jobEntity.getBody());
         logger.info("Completed 'PUT' request: registerJobForClient(String, String)");
-        return new ResponseEntity<>("", HttpStatus.OK);
+        return clientEntity;
     }
 
     @DeleteMapping("{id}")

@@ -48,7 +48,7 @@ public class EmployerController
         logger.info("Completed 'POST' request: registerEmployer(EmployerDto)");
         return responseEntity;
     }
-
+/*
     @PutMapping("{employer_id}/job")
     @Operation(summary = "Add an existing job for employer!")
     public ResponseEntity<?> createJobToEmployer(
@@ -65,6 +65,7 @@ public class EmployerController
         logger.info("Completed 'PUT' request: createJobForEmployer(EmployerDto)");
         return responseEntity;
     }
+*/
 
     @DeleteMapping("{id}")
     @Operation(summary = "Delete employer with all jobs by id!")

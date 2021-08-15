@@ -32,10 +32,11 @@ public class Job {
         }
         this.contractTime = contractTime;
     }
-
+/*
     public void generateAndSetUUID() {
         if (id == null || id.equals("")) {
             setId(String.valueOf(UUID.randomUUID()));
         }
     }
+    */
 }

@@ -1,19 +1,17 @@
 package com.codecool.workfinder.service;
 
-import com.aventrix.jnanoid.jnanoid.NanoIdUtils;
+import com.codecool.workfinder.model.dto.EmployerDto;
 import com.codecool.workfinder.model.dto.JobDto;
+import com.codecool.workfinder.model.entity.Employer;
 import com.codecool.workfinder.model.entity.Job;
+import com.codecool.workfinder.model.mapper.EmployerMapper;
 import com.codecool.workfinder.model.mapper.JobMapper;
 import com.codecool.workfinder.repository.EmployerRepository;
-import com.codecool.workfinder.model.dto.EmployerDto;
-import com.codecool.workfinder.model.entity.Employer;
-import com.codecool.workfinder.model.mapper.EmployerMapper;
 import com.codecool.workfinder.repository.JobRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class EmployerService extends BaseService<Employer, EmployerDto, String> {
@@ -45,18 +43,18 @@ public class EmployerService extends BaseService<Employer, EmployerDto, String> 
         return Optional.of(employerDto);
     }
 
-    private void deleteAllJobsOfEmployers(String nanoId) {
-        jobRepository.deleteAllByEmployer_Id(nanoId);
+    private void deleteAllJobsOfEmployers(String id) {
+        jobRepository.deleteAllByEmployer_Id(id);
     }
 
     public void save(EmployerDto employerDto) {
-        if (employerDto.getId() == null) {
+/*        if (employerDto.getId() == null) {
             employerDto.setId(NanoIdUtils.randomNanoId());
-        }
+        }*/
         Employer employer = mapper.toEntity(employerDto);
         mapper.logInfo("Completed converting to Employer!");
         employer.getJobs().forEach(job -> {
-            job.generateAndSetUUID();
+            //job.generateAndSetUUID();
             jobRepository.save(job);
             jobRepository.logInfo("Completed accessing repository!");
         });

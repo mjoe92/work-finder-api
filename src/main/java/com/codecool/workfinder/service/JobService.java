@@ -1,14 +1,13 @@
 package com.codecool.workfinder.service;
 
-import com.codecool.workfinder.model.dto.EmployerDto;
+import com.codecool.workfinder.model.dto.JobDto;
 import com.codecool.workfinder.model.entity.Employer;
+import com.codecool.workfinder.model.entity.Job;
 import com.codecool.workfinder.model.mapper.EmployerMapper;
+import com.codecool.workfinder.model.mapper.JobMapper;
 import com.codecool.workfinder.repository.ClientRepository;
 import com.codecool.workfinder.repository.EmployerRepository;
 import com.codecool.workfinder.repository.JobRepository;
-import com.codecool.workfinder.model.dto.JobDto;
-import com.codecool.workfinder.model.entity.Job;
-import com.codecool.workfinder.model.mapper.JobMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -60,7 +59,7 @@ public class JobService extends BaseService<Job, JobDto, String> {
 
         String url = getLocalUrl(jobDto);
         jobDto.setUrl(url);
-        jobDto = (JobDto) fillDtoProperties(jobDto);
+        //jobDto = (JobDto) fillDtoProperties(jobDto);
         Job job = mapper.toEntity(jobDto);
         mapper.logInfo("");
 

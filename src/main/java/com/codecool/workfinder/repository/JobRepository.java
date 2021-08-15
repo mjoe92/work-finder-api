@@ -12,6 +12,7 @@ import java.util.UUID;
 
 @Repository
 public interface JobRepository extends JpaRepository<Job, String> {
+
     void deleteAllByEmployer_Id(String id);
 
     default void logInfo(String message) {
