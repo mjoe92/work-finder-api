@@ -1,12 +1,13 @@
 package com.codecool.workfinder.model.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -52,12 +53,9 @@ public class JobDto {
 
     @JsonProperty("employer")
     @JsonIgnoreProperties({"jobs"})
-    //@JsonIgnoreProperties({"name", "company", "email", "jobs"})
     private EmployerDto employerDto;
 
-    public void generateAndSetUUID() {
-        if (id == null || id.equals("")) {
-            setId(String.valueOf(UUID.randomUUID()));
-        }
-    }
+    @JsonProperty("clients")
+    @JsonIgnoreProperties({"jobs"})
+    private List<JobDto> jobDtoList = new ArrayList<>();
 }

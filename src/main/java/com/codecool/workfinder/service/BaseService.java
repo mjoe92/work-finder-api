@@ -5,7 +5,6 @@ import com.codecool.workfinder.logger.PhaseLogger;
 import com.codecool.workfinder.model.mapper.GenericMapper;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 

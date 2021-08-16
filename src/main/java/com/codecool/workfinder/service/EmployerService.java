@@ -33,7 +33,6 @@ public class EmployerService extends BaseService<Employer, EmployerDto, String> 
         if (employer == null) {
             return Optional.empty();
         }
-        //deleteAllJobsOfEmployers(nanoId);
         repository.deleteById(nanoId);
         logInfoViaRepository("Completed accessing repository!");
 
@@ -43,18 +42,10 @@ public class EmployerService extends BaseService<Employer, EmployerDto, String> 
         return Optional.of(employerDto);
     }
 
-    private void deleteAllJobsOfEmployers(String id) {
-        jobRepository.deleteAllByEmployer_Id(id);
-    }
-
     public void save(EmployerDto employerDto) {
-/*        if (employerDto.getId() == null) {
-            employerDto.setId(NanoIdUtils.randomNanoId());
-        }*/
         Employer employer = mapper.toEntity(employerDto);
         mapper.logInfo("Completed converting to Employer!");
         employer.getJobs().forEach(job -> {
-            //job.generateAndSetUUID();
             jobRepository.save(job);
             jobRepository.logInfo("Completed accessing repository!");
         });
@@ -65,20 +56,5 @@ public class EmployerService extends BaseService<Employer, EmployerDto, String> 
 
     private void logInfoViaRepository(String message) {
         ((EmployerRepository) repository).logInfo(message);
-    }
-
-    public boolean isEmployerRegistered(String employerId) {
-        return repository.existsById(employerId);
-    }
-
-    public void addJobToEmployer(JobDto jobDto, String employerId) {
-        Job job = jobMapper.toEntity(jobDto);
-        jobMapper.logInfo("Completed converting to Job!");
-        Employer employer = repository.getById(employerId);
-        logInfoViaRepository("Completed accessing repository!");
-        employer.getJobs().add(job);
-        jobRepository.save(job);
-        jobRepository.logInfo("Completed accessing repository!");
-        logger.info("Completed method: createJobToEmployer(JobDto)!");
     }
 }

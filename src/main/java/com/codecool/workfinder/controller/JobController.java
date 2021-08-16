@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("jobs")
@@ -52,14 +51,29 @@ public class JobController
     @PostMapping("{employer_id}")
     @Operation(summary = "Register new job into repository or" +
             " edit existed one (ACCESSED ONLY FOR EMPLOYERS)!")
-    public JobDto jobRegister(
+    public ResponseEntity<?> jobRegister(
             @RequestBody @Valid JobDto jobDto,
             @PathVariable("employer_id") String employerId) {
 
         logger.info("Start 'POST' request: jobRegister(Job, String)");
-        jobDto = returnWithApiCheck(service.assignJobToEmployerThenSave(jobDto, employerId), employerId);
+        jobDto = returnWithApiCheck(service
+                .assignJobToEmployerThenSave(jobDto, employerId), employerId);
+        ResponseEntity<?> responseEntity = response.getEntityWithStatus(jobDto);
         logger.info("Completed 'POST' request: jobRegister(Job, String)");
-        return jobDto;
+        return responseEntity;
+    }
+
+    @DeleteMapping("{job_id}/{employer_id}")
+    @Operation(summary = "Delete job by id in repository!")
+    public ResponseEntity<?> deleteById(
+            @PathVariable("job_id") String jobId,
+            @PathVariable("employer_id") String employerId) {
+
+        logger.info("Start 'DELETE' request: jobRegister(String, Long)");
+        Optional<JobDto> jobDto = returnWithApiCheck(service.deleteById(jobId), employerId);
+        ResponseEntity<?> responseEntity = response.getEntityWithStatus(jobDto.orElse(null));
+        logger.info("Completed 'DELETE' request: jobRegister(String, Long)");
+        return responseEntity;
     }
 
     private <R> R returnWithApiCheck(R response, String employerId) {
@@ -68,16 +82,5 @@ public class JobController
         }
         logger.error("Invalid employer name!");
         return null;
-    }
-
-    @DeleteMapping("{id}")
-    @Operation(summary = "Delete job by id in repository!")
-    public JobDto deleteById(
-            @PathVariable("id") String id) {
-
-        logger.info("Start 'DELETE' request: jobRegister(String, Long)");
-        JobDto jobDto = service.deleteById(id);
-        logger.info("Completed 'DELETE' request: jobRegister(String, Long)");
-        return jobDto;
     }
 }

@@ -12,14 +12,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class JobService extends BaseService<Job, JobDto, String> {
 
     private final EmployerRepository employerRepository;
-    private final EmployerMapper employerMapper;
     private final ClientRepository clientRepository;
     private final ApiFetchService apiFetchService;
     @Autowired
@@ -34,7 +33,6 @@ public class JobService extends BaseService<Job, JobDto, String> {
         this.employerRepository = employerRepository;
         this.clientRepository = clientRepository;
         this.apiFetchService = apiFetchService;
-        this.employerMapper = employerMapper;
     }
 
     private final String LOCAL_URL_PATH = "http://localhost:8081";
@@ -74,15 +72,6 @@ public class JobService extends BaseService<Job, JobDto, String> {
         return jobDto;
     }
 
-    private Object fillDtoProperties(Object object) {
-        if (object instanceof JobDto) {
-            JobDto jobDto = (JobDto) object;
-            jobDto.generateAndSetUUID();
-            return jobDto;
-        }
-        return object;
-    }
-
     private String getLocalUrl(JobDto jobDto) {
         String path = jobDto.getUrl();
         if (path == null || path.equals("")) {
@@ -106,14 +95,18 @@ public class JobService extends BaseService<Job, JobDto, String> {
         return allJobs;
     }
 
-    public JobDto deleteById(String id) {
+    public Optional<JobDto> deleteById(String id) {
         logger.info("Completed accessing repository '"
                 + repository.getClass().getSimpleName() + "'");
         Job job = repository.getById(id);
+        clientRepository.findAll().forEach(client -> {
+            client.getJobs().remove(job);
+            clientRepository.save(client);
+        });
         repository.deleteById(id);
         JobDto dto = mapper.toDto(job);
         logger.info("Completed coupling to controller: deleteById()");
-        return dto;
+        return Optional.of(dto);
     }
 
     public boolean isValidEmployer(String id) {

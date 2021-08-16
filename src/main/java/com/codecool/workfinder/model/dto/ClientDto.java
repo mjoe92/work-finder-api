@@ -1,14 +1,13 @@
 package com.codecool.workfinder.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Data
 @Schema(description = "A User Object")
@@ -27,7 +26,8 @@ public class ClientDto {
     @Schema(description = "Email of client", example = "john.doe@gmail.com")
     private String email;
 
-    private List<JobDto> jobs = new ArrayList<>();
+    @JsonIgnoreProperties("clients")
+    private Set<JobDto> jobs = new HashSet<>();
 
     public void generateAndSetUUID() {
         if (id == null || id.equals("")) {

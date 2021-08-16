@@ -3,13 +3,13 @@ package com.codecool.workfinder.service;
 import com.codecool.workfinder.logger.ConsoleLogger;
 import com.codecool.workfinder.logger.PhaseLogger;
 import com.codecool.workfinder.model.api.adzuna.AdzunaJobCollection;
-import com.codecool.workfinder.repository.ApiRepository;
+import com.codecool.workfinder.model.api.jooble.JoobleJobCollection;
 import com.codecool.workfinder.model.entity.Job;
+import com.codecool.workfinder.repository.ApiRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class ApiFetchService {
@@ -25,9 +25,16 @@ public class ApiFetchService {
         this.logger = new PhaseLogger(this.getClass());
     }
 
-    public AdzunaJobCollection getJobCollection(String apiName, String title, String location, Long pages) {
+    public Object getJoobleJobCollection(String title, String location) {
         return restTemplate.getForObject(
-                getApiUrl(apiName, title, location, pages),
+                getApiUrl("jooble", title, location, 0L),
+                Object.class
+        );
+    }
+
+    public AdzunaJobCollection getAdzunaJobCollection(String title, String location, Long pages) {
+        return restTemplate.getForObject(
+                getApiUrl("adzuna", title, location, pages),
                 AdzunaJobCollection.class
         );
     }
@@ -38,7 +45,7 @@ public class ApiFetchService {
                                   Long pages) {
 
         logger.info("");
-        AdzunaJobCollection jobCollection = getJobCollection(apiName, title, location, pages);
+        AdzunaJobCollection jobCollection = getAdzunaJobCollection(title, location, pages);
         List<Job> jobs = jobCollection.toJobList();
         logger.info("");
         return jobs;

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface EmployerRepository extends JpaRepository<Employer, String> {
+
     default void logInfo(String message) {
         ConsoleLogger logger = new PhaseLogger(this.getClass());
         logger.info(message);

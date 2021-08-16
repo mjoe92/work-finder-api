@@ -3,15 +3,14 @@ package com.codecool.workfinder.model.entity;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.UUID;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity
 public class Job {
 
     @Id
-    //@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "uuid")
-    //@GenericGenerator(name = "uuid", strategy = "uuid2")
     private String id;
     private String category;
     private String title;
@@ -24,7 +23,9 @@ public class Job {
     private Integer minSalary;
     private Integer maxSalary;
     @ManyToOne(fetch = FetchType.LAZY)
-    private Employer employer = new Employer();
+    private Employer employer;
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
+    private List<Client> clientList = new ArrayList<>();
 
     public void setContractTime(String contractTime) {
         if (contractTime == null || contractTime.equals("")) {
@@ -32,11 +33,4 @@ public class Job {
         }
         this.contractTime = contractTime;
     }
-/*
-    public void generateAndSetUUID() {
-        if (id == null || id.equals("")) {
-            setId(String.valueOf(UUID.randomUUID()));
-        }
-    }
-    */
 }

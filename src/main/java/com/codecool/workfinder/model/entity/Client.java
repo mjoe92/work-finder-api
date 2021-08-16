@@ -1,27 +1,20 @@
 package com.codecool.workfinder.model.entity;
 
 import lombok.Data;
-import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @Entity
 public class Client {
 
-    private String name;
     @Id
-    //@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "uuid")
-    //@GenericGenerator(name = "uuid", strategy = "uuid2")
     private String id;
-
-
+    private String name;
     @Column(unique = true)
     private String email;
-
-    @OneToMany
-    private List<Job> jobs = new ArrayList<>();
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
+    private Set<Job> jobs = new HashSet<>();
 }
