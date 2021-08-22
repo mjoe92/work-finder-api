@@ -1,7 +1,6 @@
 package com.codecool.workfinder.controller;
 
 import com.codecool.workfinder.model.dto.EmployerDto;
-import com.codecool.workfinder.model.dto.JobDto;
 import com.codecool.workfinder.model.entity.Employer;
 import com.codecool.workfinder.service.EmployerService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -10,11 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-
 import java.util.Optional;
-
-import static org.springframework.http.HttpStatus.NOT_FOUND;
-import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 @RequestMapping("employers")
@@ -48,24 +43,6 @@ public class EmployerController
         logger.info("Completed 'POST' request: registerEmployer(EmployerDto)");
         return responseEntity;
     }
-/*
-    @PutMapping("{employer_id}/job")
-    @Operation(summary = "Add an existing job for employer!")
-    public ResponseEntity<?> createJobToEmployer(
-            @Valid @RequestBody JobDto jobDto,
-            @PathVariable("employer_id") String employerId) {
-
-        logger.info("Start 'PUT' request: createJobForEmployer(EmployerDto)");
-        boolean isRegistered = service.isEmployerRegistered(employerId);
-        if (!isRegistered) {
-            return new ResponseEntity<>("No matching employer id!", NOT_FOUND);
-        }
-        service.addJobToEmployer(jobDto, employerId);
-        ResponseEntity<?> responseEntity = response.getEntityWithStatus(jobDto);
-        logger.info("Completed 'PUT' request: createJobForEmployer(EmployerDto)");
-        return responseEntity;
-    }
-*/
 
     @DeleteMapping("{id}")
     @Operation(summary = "Delete employer with all jobs by id!")

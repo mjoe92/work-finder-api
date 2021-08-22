@@ -36,11 +36,7 @@ public class ApiFetcherIntegrationTests {
 
     @Autowired
     private TestRestTemplate restTemplate;
-/*
-    private final Map<String, String> apiUrls = new HashMap<>() {{
-        put("adzuna", String.format("http://localhost:%d/%s", port, apiName));
-    }};
-*/
+
     private final static String apiName = "adzuna";
 
     @BeforeEach
