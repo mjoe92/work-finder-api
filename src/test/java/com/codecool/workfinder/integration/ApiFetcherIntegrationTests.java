@@ -27,7 +27,6 @@ import static org.springframework.test.util.AssertionErrors.assertTrue;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-@ActiveProfiles("test")
 @TestMethodOrder(value = MethodOrderer.OrderAnnotation.class)
 public class ApiFetcherIntegrationTests {
 

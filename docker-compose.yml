@@ -1,0 +1,24 @@
+version: '2'
+
+services:
+  app:
+    image: 'work-finder-api:latest'
+    build:
+      context: .
+    container_name: app
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/work_finder_api_db
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=Monkey92
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=create
+
+  db:
+    image: 'postgres:13.1-alpine'
+    container_name: db
+    ports:
+    - 5432:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=Monkey92
