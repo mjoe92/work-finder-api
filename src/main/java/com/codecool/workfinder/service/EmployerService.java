@@ -1,9 +1,7 @@
 package com.codecool.workfinder.service;
 
 import com.codecool.workfinder.model.dto.EmployerDto;
-import com.codecool.workfinder.model.dto.JobDto;
 import com.codecool.workfinder.model.entity.Employer;
-import com.codecool.workfinder.model.entity.Job;
 import com.codecool.workfinder.model.mapper.EmployerMapper;
 import com.codecool.workfinder.model.mapper.JobMapper;
 import com.codecool.workfinder.repository.EmployerRepository;

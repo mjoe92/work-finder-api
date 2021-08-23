@@ -3,7 +3,6 @@ package com.codecool.workfinder.service;
 import com.codecool.workfinder.logger.ConsoleLogger;
 import com.codecool.workfinder.logger.PhaseLogger;
 import com.codecool.workfinder.model.api.adzuna.AdzunaJobCollection;
-import com.codecool.workfinder.model.api.jooble.JoobleJobCollection;
 import com.codecool.workfinder.model.entity.Job;
 import com.codecool.workfinder.repository.ApiRepository;
 import org.springframework.stereotype.Service;

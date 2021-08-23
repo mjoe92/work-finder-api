@@ -1,6 +1,6 @@
 package com.codecool.workfinder.integration;
 
-import com.codecool.workfinder.model.dto.EmployerDto;
+import com.codecool.workfinder.model.entity.Employer;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
@@ -12,13 +12,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.test.annotation.DirtiesContext;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
@@ -32,8 +34,35 @@ public class EmployerIntegrationTests {
     @Autowired
     private TestRestTemplate restTemplate;
 
+    private final List<HttpEntity<Employer>> employerEntities = generateEntities();
+
+    public List<HttpEntity<Employer>> generateEntities() {
+        List<Employer> employers = generateEmployers();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        List<HttpEntity<Employer>> entities = new ArrayList<>();
+        for (Employer employer : employers) {
+            HttpEntity<Employer> entity = new HttpEntity<>(employer, headers);
+            entities.add(entity);
+        }
+        return entities;
+    }
+
+    private List<Employer> generateEmployers() {
+        List<Employer> employerList = new ArrayList<>();
+        for (int i = 0; i <= 9; i++) {
+            Employer employer = new Employer();
+            employer.setId("V1StGXR8_Z5jdHi6B-my" + i);
+            employer.setName("name_" + i);
+            employer.setEmail("email_" + i);
+            employer.setCompany("company_" + i);
+            employerList.add(employer);
+        }
+        return employerList;
+    }
+
     @BeforeEach
-    public void setup() {
+    void setup() {
         this.baseUrl = String.format("http://localhost:%d/employers", port);
     }
 
@@ -61,31 +90,9 @@ public class EmployerIntegrationTests {
 
     @Test
     @Order(3)
-    public void registerEmployer_returnResponseWithEmployer() {
-        EmployerDto employerDto = getResponseOfPostRequest();
-        ResponseEntity<?> entity = restTemplate.postForEntity(baseUrl, ResponseEntity.class, EmployerDto.class);
-    }
-
-    private EmployerDto getResponseOfPostRequest() {
-
-        return null;
-    }
-
-    @Test
-    @Order(4)
-    public void findAllInRepo_returnResponseWithEmployerList() {
-
-    }
-
-    @Test
-    @Order(5)
-    public void findById_returnResponseWithEmployer() {
-
-    }
-
-    @Test
-    @Order(6)
-    public void deleteById_returnResponseWithDeletedEmployer() {
-
+    public void registerNewEmployer_returnResponseWithEmployer() {
+        ResponseEntity<Employer> testEmployer = restTemplate
+                .postForEntity(baseUrl, employerEntities.get(0), Employer.class);
+        assertNotNull(testEmployer);
     }
 }

@@ -21,7 +21,7 @@ public class WorkFinderApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(WorkFinderApplication.class, args);
-        logging(8081);
+        logging(8080);
     }
 
     private static void logging(int port) {

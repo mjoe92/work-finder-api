@@ -18,16 +18,32 @@ Követelmények:
       Adzuna
    
 Vezérlés:
+    
 -  Job service:
-   1. GET   -   listJobsBy(@PathVariable String, @RequestParam String...)
-                return ResponseEntity(List<JobDto>) -> (jobs/{api_key})
+   
+   1. GET   -   /jobs
+                listAll()
+                return ResponseEntity(List<JobDto>)
+
+   2. GET   -   /jobs/apis/{api_name} : SEARCH IN JOBS API
+                listJobsBy(@PathVariable String, @RequestParam String...)
+                return ResponseEntity(List<JobDto>)
                 no key requires
+   
+   3. GET   -   /jobs/{id}
+                findById(@PathVariable String)
+                return ResponseEntity(JobDto)
       
-   2. POST  -   jobRegister(@PathVariable String, @RequestBody Job)
-                return ResponseEntity(JobDto) -> (jobs/{api_key})
+   4. POST  -   /jobs/{employer_id}
+                jobRegister(@PathVariable String, @RequestBody Job)
+                return ResponseEntity(JobDto)
                 employer_id requires
       
-   3. DELETE-   deleteById(@PathVariable String, @PathVariable )
+   5. DELETE-   /jobs/{job_id}/{employer_id}
+                deleteById(@PathVariable String, @PathVariable )
+                
+- Client service
+- Employer service
 
 Kiegészítések:
 1. Alap CRUD mindkettőre JSON objektum átvitellel + GET / POST a 
